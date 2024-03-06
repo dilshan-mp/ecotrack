@@ -1,3 +1,5 @@
+import 'package:ecotrack/style/button.dart';
+import 'package:ecotrack/style/text.dart';
 import 'package:flutter/material.dart';
 
 class FirstPage extends StatelessWidget {
@@ -5,12 +7,35 @@ class FirstPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      appBar: AppBar(),
-      body: Column(
-        children: [
-          Image.asset("asset/images/appIcon.png")
-        ],
+    return  SafeArea(
+      child: Scaffold(
+        appBar: AppBar(),
+         body: Center(
+           child: Container(
+            margin: const EdgeInsets.all(15.0),
+            width: 350,
+            child: Column(
+              children: [
+                Image.asset("asset/images/appicon.png",width: 350,height:100,),
+                const SizedBox(height: 300,),
+                OutlinedButton(
+                   style:secondMainButton ,
+                  onPressed: (){},
+                  child: const Text(
+                    "Sign Up",
+                    style: OutlinedText,
+                  )
+                 ),
+                 const SizedBox(height: 20,),
+                 ElevatedButton(
+                  onPressed: (){},
+                  style: mainButtton,
+                  child: const Text("Sign In",style:MainbuttonText ,),
+                )
+              ],
+            ),
+           ),
+        ),
       ),
     );
   }

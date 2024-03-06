@@ -9,3 +9,13 @@ final ButtonStyle mainButtton = ElevatedButton.styleFrom(
     borderRadius: BorderRadius.circular(20)
   )
 );
+
+final ButtonStyle secondMainButton = OutlinedButton.styleFrom(
+  minimumSize: const Size(352, 50),
+  backgroundColor: Colors.white,
+  side: const BorderSide(color: Color(0xff46A74A)),
+  elevation: 0,
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(20)
+  ),
+);
