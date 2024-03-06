@@ -1,6 +1,5 @@
 import 'package:ecotrack/screen/firstPage.dart';
 import 'package:ecotrack/style/button.dart';
-import 'package:ecotrack/style/colors.dart';
 import 'package:ecotrack/style/text.dart';
 import 'package:flutter/material.dart';
 class StartPage extends StatelessWidget {
