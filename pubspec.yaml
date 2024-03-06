@@ -21,6 +21,7 @@ flutter:
   uses-material-design: true
   assets:
     - asset/images/startImage.jpg
+    - asset/images/appicon.png
   fonts:
     - family: Poppins-Bold
       fonts:

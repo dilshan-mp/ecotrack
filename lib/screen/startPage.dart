@@ -1,3 +1,4 @@
+import 'package:ecotrack/screen/firstPage.dart';
 import 'package:ecotrack/style/button.dart';
 import 'package:ecotrack/style/colors.dart';
 import 'package:ecotrack/style/text.dart';
@@ -36,7 +37,9 @@ class StartPage extends StatelessWidget {
             const SizedBox(height: 60,),
             ElevatedButton(
               style: mainButtton,
-              onPressed: (){},
+              onPressed: (){
+               Navigator.push(context, MaterialPageRoute(builder: (context)=>const FirstPage()));
+              },
               child: const Text(
                 "Start here",
                 style: MainbuttonText,
