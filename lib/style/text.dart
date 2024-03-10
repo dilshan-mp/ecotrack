@@ -6,3 +6,10 @@ const TextStyle MainbuttonText =  TextStyle(
   fontSize: 20
   );
 
+  const TextStyle OutlinedText =  TextStyle(
+  color: Colors.black,
+  fontFamily: "Poppins-Bold",
+  fontSize: 20
+  );
+
+
