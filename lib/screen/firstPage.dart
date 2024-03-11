@@ -1,3 +1,4 @@
+import 'package:ecotrack/screen/signInPage.dart';
 import 'package:ecotrack/style/button.dart';
 import 'package:ecotrack/style/text.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,9 @@ class FirstPage extends StatelessWidget {
                  ),
                  const SizedBox(height: 20,),
                  ElevatedButton(
-                  onPressed: (){},
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const SignInPage()));
+                  },
                   style: mainButtton,
                   child: const Text("Sign In",style:MainbuttonText ,),
                 )
