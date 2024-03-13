@@ -1,3 +1,4 @@
+import 'package:ecotrack/screen/storePage.dart';
 import 'package:ecotrack/style/button.dart';
 import 'package:ecotrack/style/text.dart';
 import 'package:flutter/material.dart';
@@ -18,14 +19,14 @@ class _SignInPageState extends State<SignInPage> {
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
-        padding: const EdgeInsets.only(top: 80),
+        padding: const EdgeInsets.only(top: 60),
         child: Center(
           child: Column(
             children: [
               Image.asset(
                 "asset/images/appicon.png"
               ),
-              const SizedBox(height: 80,),
+              const SizedBox(height: 50,),
               Padding(
                 padding: const EdgeInsets.only(left: 20,right: 20),
                 child: Column(
@@ -44,7 +45,7 @@ class _SignInPageState extends State<SignInPage> {
                         prefixIcon: const Icon(Icons.email)
                       ),
                     ),
-                    const SizedBox(height: 20,),
+                    const SizedBox(height: 10,),
                     TextFormField(
                       obscureText: _isVisible,
                       decoration:  InputDecoration(
@@ -68,9 +69,11 @@ class _SignInPageState extends State<SignInPage> {
                   ],
                 ),
               ),
-              const SizedBox(height: 40,),
+              const SizedBox(height: 30,),
               ElevatedButton(
-                onPressed: (){},
+                onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>MyHomePage()));
+                },
                 style:mainButtton ,
                 child:const Text("Sign In",style: MainbuttonText,),
               )

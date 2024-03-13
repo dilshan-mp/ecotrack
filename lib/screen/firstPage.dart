@@ -1,4 +1,5 @@
 import 'package:ecotrack/screen/signInPage.dart';
+import 'package:ecotrack/screen/signUpPage.dart';
 import 'package:ecotrack/style/button.dart';
 import 'package:ecotrack/style/text.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,9 @@ class FirstPage extends StatelessWidget {
                 const SizedBox(height: 300,),
                 OutlinedButton(
                    style:secondMainButton ,
-                  onPressed: (){},
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (contect)=>const SignUpPage()));
+                  },
                   child: const Text(
                     "Sign Up",
                     style: OutlinedText,
