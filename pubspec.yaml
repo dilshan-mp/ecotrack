@@ -23,6 +23,7 @@ flutter:
   assets:
     - asset/images/startImage.jpg
     - asset/images/appicon.png
+    - asset/images/feed1.jpg
   fonts:
     - family: Poppins-Bold
       fonts:
