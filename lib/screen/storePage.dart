@@ -1,124 +1,127 @@
-import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
-import 'package:ecotrack/screen/firstPage.dart';
-import 'package:ecotrack/screen/homePage.dart';
 import 'package:flutter/material.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
+class StorePage extends StatefulWidget {
   @override
-  // ignore: library_private_types_in_public_api
-  _MyHomePageState createState() => _MyHomePageState();
+  _StorePageState createState() => _StorePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  final NotchBottomBarController _controller = NotchBottomBarController();
-  int currentIndex = 0;
+class _StorePageState extends State<StorePage> {
+  String _selectedButton = ''; // Track the selected button
+  List<String>category = ['Clay','Glass','Iron','wood'];
+  int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Hello Dilshan",style: TextStyle(color: Colors.black),),
-        actions: [
-          IconButton(
-            onPressed: (){},
-            icon: const Icon(Icons.person),
-          )
-        ],
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: const Text("Store",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30),),
       ),
       body: Column(
         children: [
           Container(
-            height:350,
-            color: Colors.red,
-            child: Column(
+            padding: const EdgeInsets.only(left: 8,right: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                const ListTile(
-                  leading: CircleAvatar(),
-                  title: Text("this is first notice"),
-                  subtitle: Text("this is a subtitile"),
+                Expanded(
+                  flex: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 4,right: 4),
+                    child: CustomButton(
+                      text: 'Clay',
+                      isSelected: _selectedButton == 'Clay',
+                      onTap: () {
+                        setState(() {
+                          _selectedButton = 'Clay';
+                        });
+                      },
+                    ),
+                  ),
                 ),
-                Expanded(child: Container(
-                  color: Colors.blue,
-                ))
+                Expanded(
+                  flex: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 4,right: 4),
+                    child: CustomButton(
+                      text: 'Glass',
+                      isSelected: _selectedButton == 'Glass',
+                      onTap: () {
+                        setState(() {
+                          _selectedButton = 'Glass';
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 4,right: 4),
+                    child: CustomButton(
+                      text: 'Iron',
+                      isSelected: _selectedButton == 'Iron',
+                      onTap: () {
+                        setState(() {
+                          _selectedButton = 'Iron';
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 4,right: 4),
+                    child: CustomButton(
+                      text: 'Wood',
+                      isSelected: _selectedButton == 'Wood',
+                      onTap: () {
+                        setState(() {
+                          _selectedButton = 'Wood';
+                        });
+                      },
+                    ),
+                  ),
+                ),
               ],
             ),
-
-          )
-        ],
-      ),
-      bottomNavigationBar: AnimatedNotchBottomBar(
-        notchBottomBarController: _controller,
-        bottomBarItems: const [
-          BottomBarItem(
-            inActiveItem: Icon(
-              Icons.home_filled,
-              color: Colors.black,
-            ),
-            activeItem: Icon(
-              Icons.home_filled,
-              color: Colors.green,
-            ),
-            itemLabel: 'Home',
-          ),
-          BottomBarItem(
-            inActiveItem: Icon(
-              Icons.computer,
-              color: Colors.blueGrey,
-            ),
-            activeItem: Icon(
-              Icons.computer,
-              color: Colors.green,
-            ),
-            itemLabel: 'Request',
-          ),
-          BottomBarItem(
-            inActiveItem: Icon(
-              Icons.location_on,
-              color: Colors.blueGrey,
-            ),
-            activeItem: Icon(
-              Icons.location_on,
-              color: Colors.green,
-            ),
-            itemLabel: 'location',
-          ),
-             BottomBarItem(
-            inActiveItem: Icon(
-              Icons.store,
-              color: Colors.blueGrey,
-            ),
-            activeItem: Icon(
-              Icons.store,
-              color: Colors.green,
-            ),
-            itemLabel: 'store',
           ),
         ],
-        removeMargins: true,
-        bottomBarWidth: MediaQuery.of(context).size.width,
-        durationInMilliSeconds: 300,
-        showLabel: true,
-        itemLabelStyle: const TextStyle(
-          color: Colors.green,
-          fontSize: 16.0,
-        ),
-        notchColor: Colors.green,
-        showBlurBottomBar: true,
-        blurOpacity: 0.2,
-        blurFilterX: 5.0,
-        blurFilterY: 10.0, 
-        onTap: (index) {
-          if(index == 0){
-            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const HomePage()));
-          }
-         },
-        kIconSize: 24.0,
-        kBottomRadius: 16.0,
-        color: const Color(0xff46A74A),
       ),
     );
   }
 }
 
+class CustomButton extends StatelessWidget {
+  final String text;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const CustomButton({super.key, 
+    required this.text,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.green : Colors.grey.shade300,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Center(
+          child: Text(
+            text,
+            style: TextStyle(
+              color: isSelected ? Colors.white : Colors.black,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

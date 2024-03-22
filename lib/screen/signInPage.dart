@@ -1,6 +1,8 @@
+import 'package:ecotrack/screen/homePage.dart';
 import 'package:ecotrack/screen/storePage.dart';
 import 'package:ecotrack/style/button.dart';
 import 'package:ecotrack/style/text.dart';
+import 'package:ecotrack/Components/bottomNavBar.dart';
 import 'package:flutter/material.dart';
 
 class SignInPage extends StatefulWidget {
@@ -72,7 +74,7 @@ class _SignInPageState extends State<SignInPage> {
               const SizedBox(height: 30,),
               ElevatedButton(
                 onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>MyHomePage()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>const bottomNavigationBar()));
                 },
                 style:mainButtton ,
                 child:const Text("Sign In",style: MainbuttonText,),
