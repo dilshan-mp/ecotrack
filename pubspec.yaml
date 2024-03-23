@@ -7,10 +7,19 @@ environment:
   sdk: '>=3.2.6 <4.0.0'
 
 dependencies:
+  animated_notch_bottom_bar: ^1.0.1
   device_preview: ^1.1.0
+  dio: ^5.4.1
   flutter:
     sdk: flutter
+  flutter_polyline_points: ^2.0.0
+  flutter_svg: ^2.0.10+1
   google_fonts: ^6.2.0
+  google_maps_flutter: ^2.5.3
+  google_nav_bar: ^5.0.6
+  image_picker: ^1.0.7
+  like_button: ^2.0.5
+  searchfield: ^1.0.0
 
 dev_dependencies:
   flutter_test:
@@ -21,6 +30,16 @@ flutter:
   uses-material-design: true
   assets:
     - asset/images/startImage.jpg
+    - asset/images/appicon.png
+    - asset/images/feed1.jpg
+    - asset/images/1a8a6ac05e82a7d9b5ddcd225c5e7384.jpg
+    - asset/images/lighting-fixtures-glass-recycling-ideas-11.jpg
+    - asset/Icons/SVG/food-dish-svgrepo-com.svg
+    - asset/Icons/SVG/truck-long-svgrepo-com (1).svg
+    - asset/Icons/SVG/care-request-reviewer-svgrepo-com.svg
+    - asset/Icons/SVG/location-pin-map-svgrepo-com.svg
+    - asset/Icons/SVG/complain-user-ui-svgrepo-com.svg
+    - asset/Icons/SVG/complaint-svgrepo-com.svg
   fonts:
     - family: Poppins-Bold
       fonts:
