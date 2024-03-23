@@ -1,5 +1,5 @@
-import 'package:ecotrack/screen/signInPage.dart';
-import 'package:ecotrack/screen/signUpPage.dart';
+import 'package:ecotrack/screen/User/signInPage.dart';
+import 'package:ecotrack/screen/User/signUpPage.dart';
 import 'package:ecotrack/style/button.dart';
 import 'package:ecotrack/style/text.dart';
 import 'package:flutter/material.dart';

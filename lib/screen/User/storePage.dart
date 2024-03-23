@@ -86,6 +86,47 @@ class _StorePageState extends State<StorePage> {
               ],
             ),
           ),
+          Container(
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(30),
+                      child: Container(
+                        width: 150,
+                        height: 300,
+                        decoration: const BoxDecoration(
+                          boxShadow: [
+                      BoxShadow(
+                           color: Color.fromARGB(255, 237, 231, 231),
+                           spreadRadius: 1,
+                           blurRadius: 5
+                        )
+                          ]
+                        ),
+                        child: Column(
+                          children: [
+                            Image.asset('asset/images/1a8a6ac05e82a7d9b5ddcd225c5e7384.jpg'),
+                            const SizedBox(height: 4,),
+                            const Text("Glass Light",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.green,fontSize: 25),),
+                            const Text("Rs.800.00",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
+                            ElevatedButton(
+                              onPressed: (){},
+                              child: const Text("Details"),
+                              style: ElevatedButton.styleFrom(
+                                
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
+          )
         ],
       ),
     );

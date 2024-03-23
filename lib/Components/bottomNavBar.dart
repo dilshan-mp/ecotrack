@@ -1,9 +1,9 @@
-import 'package:ecotrack/screen/disposalRequest.dart';
-import 'package:ecotrack/screen/homePage.dart';
-import 'package:ecotrack/screen/locationPage.dart';
-import 'package:ecotrack/screen/requestPage.dart';
-import 'package:ecotrack/screen/storePage.dart';
-import 'package:ecotrack/screen/storePages.dart';
+import 'package:ecotrack/screen/User/disposalRequest.dart';
+import 'package:ecotrack/screen/User/homePage.dart';
+import 'package:ecotrack/screen/User/locationPage.dart';
+import 'package:ecotrack/screen/User/requestPage.dart';
+import 'package:ecotrack/screen/User/storePage.dart';
+import 'package:ecotrack/screen/User/storePages.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 // ignore: camel_case_types

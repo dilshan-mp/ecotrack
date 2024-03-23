@@ -15,7 +15,12 @@ class _LocationPageState extends State<LocationPage> {
       appBar: AppBar(
         title: const Text('Location'),
       ),
-      body: const GoogleMap(initialCameraPosition: CameraPosition(target:_pGoogleplex,zoom: 13 ))
+      body: const GoogleMap(
+        initialCameraPosition: CameraPosition(
+          target:_pGoogleplex,
+          zoom: 13
+        )
+      ),
     );
   }
 }

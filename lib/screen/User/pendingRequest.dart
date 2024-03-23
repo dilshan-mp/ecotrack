@@ -1,4 +1,4 @@
-import 'package:ecotrack/screen/locationPage.dart';
+import 'package:ecotrack/screen/User/locationPage.dart';
 import 'package:ecotrack/style/colors.dart';
 import 'package:ecotrack/style/text.dart';
 import 'package:flutter/material.dart';

@@ -1,4 +1,4 @@
-import 'package:ecotrack/screen/pendingRequest.dart';
+import 'package:ecotrack/screen/User/pendingRequest.dart';
 import 'package:ecotrack/style/button.dart';
 import 'package:ecotrack/style/text.dart';
 import 'package:flutter/material.dart';
