@@ -1,3 +1,6 @@
+import 'package:ecotrack/screen/User/storePageDetails.dart';
+import 'package:ecotrack/screen/User/storePages.dart';
+import 'package:ecotrack/style/colors.dart';
 import 'package:flutter/material.dart';
 
 class StorePage extends StatefulWidget {
@@ -92,10 +95,10 @@ class _StorePageState extends State<StorePage> {
                 Row(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(30),
+                      padding: const EdgeInsets.only(left: 30,top: 30),
                       child: Container(
                         width: 150,
-                        height: 300,
+                        height: 320,
                         decoration: const BoxDecoration(
                           boxShadow: [
                       BoxShadow(
@@ -110,14 +113,56 @@ class _StorePageState extends State<StorePage> {
                             Image.asset('asset/images/1a8a6ac05e82a7d9b5ddcd225c5e7384.jpg'),
                             const SizedBox(height: 4,),
                             const Text("Glass Light",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.green,fontSize: 25),),
-                            const Text("Rs.800.00",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
-                            ElevatedButton(
-                              onPressed: (){},
-                              child: const Text("Details"),
-                              style: ElevatedButton.styleFrom(
-                                
+                            const SizedBox(child: Text("Rs.800.00",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)),
+                            SizedBox(
+                              width:120 ,
+                              child: ElevatedButton(
+                                onPressed: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>const StorePageDetails()));
+                                },
+                                style:ElevatedButton.styleFrom(
+                                  backgroundColor: const Color.fromARGB(255, 96, 169, 128)
+                                ),
+                                child: const Text("Details",style: TextStyle(color: Colors.white,fontSize: 20),),
                               ),
-                            )
+                            ),
+                            
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.only(left: 30,top: 30),
+                      child: Container(
+                        width: 150,
+                        height: 320,
+                        decoration: const BoxDecoration(
+                          boxShadow: [
+                      BoxShadow(
+                           color: Color.fromARGB(255, 237, 231, 231),
+                           spreadRadius: 1,
+                           blurRadius: 5
+                        )
+                          ]
+                        ),
+                        child: Column(
+                          children: [
+                            Image.asset('asset/images/1a8a6ac05e82a7d9b5ddcd225c5e7384.jpg'),
+                            const SizedBox(height: 4,),
+                            const Text("Glass Light",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.green,fontSize: 25),),
+                            const SizedBox(child: Text("Rs.800.00",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)),
+                            SizedBox(
+                              width:120 ,
+                              child: ElevatedButton(
+                                onPressed: (){},
+                                style:ElevatedButton.styleFrom(
+                                  backgroundColor: Color.fromARGB(255, 96, 169, 128)
+                                ),
+                                child: const Text("Details",style: TextStyle(color: Colors.white,fontSize: 20),),
+                              ),
+                            ),
+                            
                           ],
                         ),
                       ),

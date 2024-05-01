@@ -1,4 +1,3 @@
-import 'package:ecotrack/screen/User/locationPage.dart';
 import 'package:ecotrack/style/colors.dart';
 import 'package:ecotrack/style/text.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +59,7 @@ class _PendingRequestPageState extends State<PendingRequestPage> {
                           padding: const EdgeInsets.only(right: 8),
                           child: ElevatedButton(
                             onPressed: (){
-                               Navigator.push(context, MaterialPageRoute(builder: (context)=>const LocationPage()));
+                              // Navigator.push(context, MaterialPageRoute(builder: (context)=> LocationPage()));
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: mainButtonColor
@@ -102,7 +101,7 @@ class _PendingRequestPageState extends State<PendingRequestPage> {
                           padding: const EdgeInsets.only(right: 8),
                           child: ElevatedButton(
                             onPressed: (){
-                               Navigator.push(context, MaterialPageRoute(builder: (context)=>const LocationPage()));
+                               //Navigator.push(context, MaterialPageRoute(builder: (context)=>LocationPage()));
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: mainButtonColor
@@ -144,7 +143,7 @@ class _PendingRequestPageState extends State<PendingRequestPage> {
                           padding: const EdgeInsets.only(right: 8),
                           child: ElevatedButton(
                             onPressed: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>const LocationPage()));
+                             // Navigator.push(context, MaterialPageRoute(builder: (context)=>LocationPage()));
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: mainButtonColor
