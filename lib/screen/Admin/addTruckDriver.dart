@@ -1,151 +1,237 @@
-import 'package:ecotrack/style/button.dart';
-import 'package:ecotrack/style/text.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-class AddTruckDriver extends StatefulWidget {
-  const AddTruckDriver({Key? key});
+class TruckDriver {
+  final String name;
+  final String licenceNumber;
+  final String phone;
+  final String nic;
+  final int age;
+  final String password;
+  final String email;
+  final String role;
 
-  @override
-  State<AddTruckDriver> createState() => _AddTruckDriverState();
+  TruckDriver({
+    required this.name,
+    required this.licenceNumber,
+    required this.phone,
+    required this.nic,
+    required this.age,
+    required this.password,
+    required this.email,
+    required this.role,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'licenceNumber': licenceNumber,
+      'phone': phone,
+      'nic': nic,
+      'age': age,
+      'password': password,
+      'email': email,
+      'role': role,
+    };
+  }
 }
 
-class _AddTruckDriverState extends State<AddTruckDriver> {
-  final _formKey = GlobalKey<FormState>();
+void main() {
+  runApp(MyApp());
+}
 
-  String? _validateAge(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter your age';
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: AddTruckDriverScreen(),
+    );
+  }
+}
+
+class AddTruckDriverScreen extends StatefulWidget {
+  @override
+  _AddTruckDriverScreenState createState() => _AddTruckDriverScreenState();
+}
+
+class _AddTruckDriverScreenState extends State<AddTruckDriverScreen> {
+  final _formKey = GlobalKey<FormState>();
+  late TextEditingController _nameController;
+  late TextEditingController _licenceNumberController;
+  late TextEditingController _phoneController;
+  late TextEditingController _nicController;
+  late TextEditingController _ageController;
+  late TextEditingController _passwordController;
+  late TextEditingController _emailController;
+  late TextEditingController _roleController;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController();
+    _licenceNumberController = TextEditingController();
+    _phoneController = TextEditingController();
+    _nicController = TextEditingController();
+    _ageController = TextEditingController();
+    _passwordController = TextEditingController();
+    _emailController = TextEditingController();
+    _roleController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _licenceNumberController.dispose();
+    _phoneController.dispose();
+    _nicController.dispose();
+    _ageController.dispose();
+    _passwordController.dispose();
+    _emailController.dispose();
+    _roleController.dispose();
+    super.dispose();
+  }
+
+  Future<void> addTruckDriver(TruckDriver truckDriver) async {
+    const String apiUrl = 'http://localhost:8080/truckdriver'; // Change this to your actual backend URL
+    final Map<String, String> headers = {
+      'Content-Type': 'application/json',
+    };
+
+    try {
+      final http.Response response = await http.post(
+        Uri.parse(apiUrl),
+        headers: headers,
+        body: json.encode(truckDriver.toJson()),
+      );
+
+      if (response.statusCode == 201) {
+        // Truck driver added successfully
+        print('Truck driver added successfully');
+      } else {
+        // Error adding truck driver
+        print('Error adding truck driver: ${response.body}');
+      }
+    } catch (error) {
+      print('Error: $error');
     }
-    final RegExp ageRegExp = RegExp(r'^[0-9]+$');
-    if (!ageRegExp.hasMatch(value)) {
-      return 'Age must contain only numbers';
-    }
-    return null;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Truck Driver",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-        ),
+        title: Text('Add Truck Driver'),
       ),
-      body: Container(
-        padding: const EdgeInsets.only(bottom: 50),
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: "Full Name",
-                          contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          prefixIcon: const Icon(Icons.person),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your full name';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 10),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: "Age",
-                          contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          prefixIcon: const Icon(Icons.date_range),
-                        ),
-                        keyboardType: TextInputType.number, // Set keyboard type to number
-                        validator: _validateAge,
-                      ),
-                      const SizedBox(height: 10),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: "NIC",
-                          contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          prefixIcon: const Icon(Icons.numbers_sharp),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your NIC';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 10),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: "License Number",
-                          contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          prefixIcon: const Icon(Icons.nine_mp_outlined),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your license number';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 10),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: "Route",
-                          contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          prefixIcon: const Icon(Icons.roundabout_right_rounded),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your route';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 10),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              // If all fields are valid, perform desired action here
-                            }
-                          },
-                          style: mainButtton,
-                          child: const Text(
-                            "Sign up",
-                            style: MainbuttonText,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              TextFormField(
+                controller: _nameController,
+                decoration: InputDecoration(labelText: 'Name'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your name';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _licenceNumberController,
+                decoration: InputDecoration(labelText: 'Licence Number'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your licence number';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _phoneController,
+                decoration: InputDecoration(labelText: 'Phone'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your phone number';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _nicController,
+                decoration: InputDecoration(labelText: 'NIC'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your NIC';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _ageController,
+                decoration: InputDecoration(labelText: 'Age'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your age';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _passwordController,
+                decoration: InputDecoration(labelText: 'Password'),
+                obscureText: true,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your password';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _emailController,
+                decoration: InputDecoration(labelText: 'Email'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your email';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _roleController,
+                decoration: InputDecoration(labelText: 'Role'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your role';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    final truckDriver = TruckDriver(
+                      name: _nameController.text,
+                      licenceNumber: _licenceNumberController.text,
+                      phone: _phoneController.text,
+                      nic: _nicController.text,
+                      age: int.parse(_ageController.text),
+                      password: _passwordController.text,
+                      email: _emailController.text,
+                      role: _roleController.text,
+                    );
+                    addTruckDriver(truckDriver);
+                  }
+                },
+                child: Text('Add Truck Driver'),
+              ),
+            ],
           ),
         ),
       ),

@@ -36,7 +36,8 @@ class AdminHomePage extends StatelessWidget {
               'Add Post',
               'asset/Icons/SVG/post-it-svgrepo-com.svg', // Add your icon path
               () {
-                // Add your functionality here
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const AdminPost ()));
               },
             ),
             SizedBox(height: 20),
@@ -56,7 +57,7 @@ class AdminHomePage extends StatelessWidget {
               'asset/Icons/SVG/truck-delivery-svgrepo-com.svg', // Add your icon path
               () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const AddTruckDriver()));
+                    MaterialPageRoute(builder: (context) => AddTruckDriverScreen()));
               },
             ),
             SizedBox(height: 20),
