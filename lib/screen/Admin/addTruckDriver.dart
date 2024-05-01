@@ -23,6 +23,55 @@ class TruckDriver {
     required this.role,
   });
 
+Future<String?> authenticateUser(String username, String password) async {
+  const apiUrl = 'http://localhost:8080/authenticate';
+
+  try {
+    final response = await http.post(
+      Uri.parse(apiUrl),
+      headers: {
+        'Content-Type': 'application/json',
+        'VERSION': 'V1', // Add any custom headers if required
+      },
+      body: json.encode({
+        'username': username,
+        'password': password,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = json.decode(response.body);
+      final token = responseData['token'] as String?;
+      return token;
+    } else {
+      // Handle authentication error
+      print('Authentication failed with status: ${response.statusCode}');
+      return null;
+    }
+  } catch (error) {
+    // Handle network or other errors
+    print('Error: $error');
+    return null;
+  }
+}
+
+// // Example usage:
+// void loginUser() async {
+//   final username = 'example@example.com'; // Replace with user's username
+//   final password = 'password123'; // Replace with user's password
+
+//   final token = await authenticateUser(username, password);
+//   if (token != null) {
+//     // Authentication successful, store the token and proceed with app logic
+//     print('JWT token: $token');
+//     // Store the token locally (e.g., using shared_preferences)
+//   } else {
+//     // Authentication failed, handle accordingly
+//     print('Authentication failed');
+//   }
+// }
+
+
   Map<String, dynamic> toJson() {
     return {
       'name': name,
@@ -36,21 +85,6 @@ class TruckDriver {
     };
   }
 }
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: AddTruckDriverScreen(),
-    );
-  }
-}
-
 class AddTruckDriverScreen extends StatefulWidget {
   @override
   _AddTruckDriverScreenState createState() => _AddTruckDriverScreenState();
