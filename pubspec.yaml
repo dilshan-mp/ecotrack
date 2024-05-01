@@ -43,6 +43,12 @@ flutter:
     - asset/Icons/SVG/location-pin-map-svgrepo-com.svg
     - asset/Icons/SVG/complain-user-ui-svgrepo-com.svg
     - asset/Icons/SVG/complaint-svgrepo-com.svg
+    - asset/Icons/SVG/post-it-svgrepo-com.svg
+    - asset/Icons/SVG/garbage-trash-svgrepo-com.svg
+    - asset/Icons/SVG/senior-man-driving-a-car-svgrepo-com.svg
+    - asset/Icons/SVG/truck-delivery-svgrepo-com.svg
+    - asset/Icons/SVG/complain-ecommerce-market-svgrepo-com.svg
+    - asset/Icons/SVG/edit-user-svgrepo-com.svg
   fonts:
     - family: Poppins-Bold
       fonts:

@@ -28,55 +28,57 @@ class AdminHomePage extends StatelessWidget {
           ],
         ),
       ),
-      body: Column(
-        children: [
-          buildButton(
-            context,
-            'Add Post',
-            'asset/Icons/SVG/complaint-svgrepo-com.svg', // Add your icon path
-            () {
-              // Add your functionality here
-            },
-          ),
-          SizedBox(height: 15),
-          buildButton(
-            context,
-            'Add Disposal Point',
-            'asset/Icons/SVG/complaint-svgrepo-com.svg', // Add your icon path
-            () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const AddDisposalPlaces()));
-            },
-          ),
-          SizedBox(height: 15),
-          buildButton(
-            context,
-            'Add Truck Driver',
-            'asset/Icons/SVG/complaint-svgrepo-com.svg', // Add your icon path
-            () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const AddTruckDriver()));
-            },
-          ),
-          SizedBox(height: 15),
-          buildButton(
-            context,
-            'View Complain',
-            'asset/Icons/SVG/complaint-svgrepo-com.svg', // Add your icon path
-            () {
-              // Add your functionality here
-            },
-          ),
-          SizedBox(height: 15),
-          buildButton(
-            context,
-            'Edit Profile Request',
-            'asset/Icons/SVG/complaint-svgrepo-com.svg', // Add your icon path
-            () {
-              // Add your functionality here
-            },
-          ),
-        ],
+      body: Center(
+        child: Column(
+          children: [
+            buildButton(
+              context,
+              'Add Post',
+              'asset/Icons/SVG/post-it-svgrepo-com.svg', // Add your icon path
+              () {
+                // Add your functionality here
+              },
+            ),
+            SizedBox(height: 20),
+            buildButton(
+              context,
+              'Add Disposal Point',
+              'asset/Icons/SVG/garbage-trash-svgrepo-com.svg', // Add your icon path
+              () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const AddDisposalPlaces()));
+              },
+            ),
+           SizedBox(height: 20),
+            buildButton(
+              context,
+              'Add Truck Driver',
+              'asset/Icons/SVG/truck-delivery-svgrepo-com.svg', // Add your icon path
+              () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const AddTruckDriver()));
+              },
+            ),
+            SizedBox(height: 20),
+            buildButton(
+              context,
+              'View Complain',
+              'asset/Icons/SVG/complain-ecommerce-market-svgrepo-com.svg', // Add your icon path
+              () {
+                // Add your functionality here
+              },
+            ),
+            SizedBox(height: 20),
+            buildButton(
+              context,
+              'Edit Profile Request',
+              'asset/Icons/SVG/edit-user-svgrepo-com.svg', // Add your icon path
+              () {
+                // Add your functionality here
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
