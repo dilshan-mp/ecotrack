@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -36,7 +37,7 @@ class _AdminPostState extends State<AdminPost> {
           children: [
             _imageFile != null
                 ? Image.file(_imageFile!)
-                : Icon(Icons.image), // Placeholder for image display
+                : const Icon(Icons.image), // Placeholder for image display
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
@@ -44,28 +45,28 @@ class _AdminPostState extends State<AdminPost> {
               },
               child: Text('Pick Image'),
             ),
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               'Description',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             TextFormField(
               controller: _descriptionController,
               maxLines: 3,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Enter description',
                 border: OutlineInputBorder(),
               ),
             ),
             SizedBox(height: 20),
-            Text(
+            const Text(
               'Date',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             InkWell(
               onTap: () => _selectDate(context),
               child: InputDecorator(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Select date',
                   border: OutlineInputBorder(),
                 ),
@@ -75,20 +76,23 @@ class _AdminPostState extends State<AdminPost> {
                     Text(
                       '${_selectedDate.toLocal()}'.split(' ')[0],
                     ),
-                    Icon(Icons.calendar_today),
+                    const Icon(Icons.calendar_today),
                   ],
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Handle form submission here
-                // Access description: _descriptionController.text
-                // Access date: _selectedDate
-                // Access image file: _imageFile
+               Map<String,dynamic>addpost={
+                'Image':"",
+                'Description':"",
+                'Date':"",
+               };
+               CollectionReference collectionReference = FirebaseFirestore.instance.collection('Admin_Post');
+               collectionReference.add(addpost);
               },
-              child: Text('Submit'),
+              child: const Text('Submit'),
             ),
           ],
         ),

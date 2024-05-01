@@ -57,7 +57,7 @@ class AdminHomePage extends StatelessWidget {
               'asset/Icons/SVG/truck-delivery-svgrepo-com.svg', // Add your icon path
               () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const AddTruckDriver()));
+                    MaterialPageRoute(builder: (context) => AddTruckDriverScreen()));
               },
             ),
             SizedBox(height: 20),
