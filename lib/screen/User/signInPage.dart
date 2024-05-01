@@ -17,7 +17,7 @@ class _SignInPageState extends State<SignInPage> {
   String? _password;
 
   Future<String?> authenticateUser(String username, String password) async {
-    const apiUrl = 'http://localhost:8080/authenticate';
+    const apiUrl = 'http://192.168.8.138:8080/authenticate';
 
     try {
       final response = await http.post(
