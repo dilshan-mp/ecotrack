@@ -36,7 +36,8 @@ class AdminHomePage extends StatelessWidget {
               'Add Post',
               'asset/Icons/SVG/post-it-svgrepo-com.svg', // Add your icon path
               () {
-                // Add your functionality here
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const AdminPost ()));
               },
             ),
             SizedBox(height: 20),
