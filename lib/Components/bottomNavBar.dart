@@ -1,6 +1,5 @@
 import 'package:ecotrack/screen/User/disposalRequest.dart';
 import 'package:ecotrack/screen/User/homePage.dart';
-import 'package:ecotrack/screen/User/locationPage.dart';
 import 'package:ecotrack/screen/User/requestPage.dart';
 import 'package:ecotrack/screen/User/storePage.dart';
 import 'package:ecotrack/screen/User/storePages.dart';
@@ -20,7 +19,6 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
   final List<Widget> _pages = [
     const HomePage(),
     const DisposalRequest(),
-    const LocationPage(),
     StorePage(),
   ];
   @override
@@ -52,10 +50,10 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
               icon:Icons.recycling,
               text: 'request',
             ),
-            GButton(
-              icon:Icons.location_on,
-              text: 'location',
-            ),
+            // GButton(
+            //   icon:Icons.location_on,
+            //   text: 'location',
+            // ),
             GButton(
               icon:Icons.store,
               text: 'store',

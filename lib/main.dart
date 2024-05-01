@@ -3,7 +3,6 @@ import 'package:ecotrack/screen/TruckDriver/TruckDriverHomePage.dart';
 import 'package:ecotrack/screen/User/disposalRequest.dart';
 import 'package:ecotrack/screen/User/firstPage.dart';
 import 'package:ecotrack/screen/User/homePage.dart';
-import 'package:ecotrack/screen/User/locationPage.dart';
 import 'package:ecotrack/screen/User/signInPage.dart';
 import 'package:ecotrack/screen/User/startPage.dart';
 import 'package:ecotrack/screen/User/storePages.dart';
@@ -25,8 +24,9 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return  const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:StartPage()
+      home:AdminHomePage()
     );
   }
 }
+
 

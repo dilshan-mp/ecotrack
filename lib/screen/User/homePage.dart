@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
           ),
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {}, 
               icon: const Icon(Icons.person),
             )
           ],
@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Padding(
                       padding: const EdgeInsets.only(top: 5, left: 8, right: 8),
                       child: Text(

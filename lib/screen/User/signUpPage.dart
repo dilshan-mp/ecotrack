@@ -241,7 +241,7 @@ class _SignUpPageState extends State<SignUpPage> {
             child: ElevatedButton(
               onPressed: _submitForm,
               style: ElevatedButton.styleFrom(
-                primary: Colors.green,
+                //primary: Colors.green,
                 padding: EdgeInsets.zero,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14),
