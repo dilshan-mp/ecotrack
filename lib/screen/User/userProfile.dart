@@ -1,3 +1,5 @@
+import 'package:ecotrack/screen/User/firstPage.dart';
+import 'package:ecotrack/screen/User/sellItems.dart';
 import 'package:flutter/material.dart';
 
 class UserProfile extends StatefulWidget {
@@ -13,6 +15,16 @@ class _UserProfileState extends State<UserProfile> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Dilsha Madushanka"),
+        actions:  [
+          Padding(
+            padding: const EdgeInsets.only(right: 30),
+            child: IconButton(
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>FirstPage()));
+              },
+              icon: const Icon(Icons.login_outlined))
+          )
+        ],
       ),
       body:ListView(
         scrollDirection: Axis.vertical,
@@ -24,6 +36,7 @@ class _UserProfileState extends State<UserProfile> {
             subtitle: const Text("change youe personal details"),
             trailing: const Icon(Icons.menu),
             onTap: (){
+
             },
           ),
           const Divider(),
@@ -33,6 +46,7 @@ class _UserProfileState extends State<UserProfile> {
             subtitle: const Text("Sell Your Iteams"),
             trailing: const Icon(Icons.menu,),
             onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>SellItems()));
             },
           ),
            const Divider(),
