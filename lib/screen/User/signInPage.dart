@@ -151,7 +151,7 @@ class _SignInPageState extends State<SignInPage> {
         // Replace HomePage() with your actual home page widget
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const bottomNavigationBar()),
+          MaterialPageRoute(builder: (context) =>  bottomNavigationBar(token:token)),
         );
       } else {
         // Authentication failed, show error message or handle accordingly

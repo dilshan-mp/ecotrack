@@ -1,30 +1,76 @@
-import 'package:ecotrack/Components/bottomNavBar.dart';
-import 'package:ecotrack/Components/likeButton.dart';
+import 'dart:convert';
+
 import 'package:ecotrack/screen/User/userProfile.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key); // Fix here
+  final String token;
+
+  const HomePage({Key? key, required this.token}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  late String userName;
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserInfo();
+  }
+
+  Future<void> _getUserInfo() async {
+    try {
+      final Uri apiUrl = Uri.parse('http://192.168.8.138:8080/user'); // Change this to your actual API URL
+      final response = await http.get(
+        apiUrl,
+        headers: {
+          'Authorization': 'Bearer ${widget.token}',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> userData = jsonDecode(response.body);
+        setState(() {
+          userName = userData['name'] as String;
+        });
+      } else {
+        print('Failed to fetch user data: ${response.statusCode}');
+        // Initialize userName with a default value
+        setState(() {
+          userName = 'Guest';
+        });
+      }
+    } catch (error) {
+      print('Error fetching user data: $error');
+      // Initialize userName with a default value
+      setState(() {
+        userName = 'Guest';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            "Hello Dilshan",
+          title: Text(
+            "Hello  $userName",
             style: TextStyle(color: Colors.black),
           ),
           actions: [
             IconButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>const UserProfile()));
-              }, 
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const UserProfile()),
+                );
+              },
               icon: const Icon(Icons.person),
             )
           ],
@@ -64,12 +110,12 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                     const Row(
+                    const Row(
                       children: [
                         ButtonBar(
                           alignment: MainAxisAlignment.start,
                           children: [
-                            Icon(Icons.favorite_border_outlined,size: 30,)
+                            Icon(Icons.favorite_border_outlined, size: 30,)
                           ],
                         ),
                       ],
@@ -84,4 +130,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-

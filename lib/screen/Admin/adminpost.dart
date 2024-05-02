@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -84,13 +85,7 @@ class _AdminPostState extends State<AdminPost> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-               Map<String,dynamic>addpost={
-                'Image':"",
-                'Description':"",
-                'Date':"",
-               };
-               CollectionReference collectionReference = FirebaseFirestore.instance.collection('Admin_Post');
-               collectionReference.add(addpost);
+                _uploadImage();
               },
               child: const Text('Submit'),
             ),
@@ -116,12 +111,67 @@ class _AdminPostState extends State<AdminPost> {
 
   Future<void> _pickImage() async {
     final ImagePicker _picker = ImagePicker();
-    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    final XFile? pickedFile =
+        await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
         _imageFile = File(pickedFile.path);
       });
     }
+  }
+
+  Future<void> _uploadImage() async {
+    if (_imageFile == null) {
+      return; // No image selected
+    }
+
+    // Upload image to Firebase Storage
+    final Reference storageReference =
+        FirebaseStorage.instance.ref().child('images/${DateTime.now()}.png');
+    final UploadTask uploadTask = storageReference.putFile(_imageFile!);
+    await uploadTask.whenComplete(() async {
+      // Retrieve the URL of the uploaded image
+      final String imageURL = await storageReference.getDownloadURL();
+
+      // Store image URL along with other details in Firestore
+      final Map<String, dynamic> addpost = {
+        'Image': imageURL,
+        'Description': _descriptionController.text,
+        'Date': _selectedDate,
+      };
+      CollectionReference collectionReference =
+          FirebaseFirestore.instance.collection('Admin_Post');
+      await collectionReference.add(addpost);
+
+      // Clear the fields after successful submission
+      setState(() {
+        _imageFile = null;
+        _descriptionController.clear();
+        _selectedDate = DateTime.now();
+      });
+
+      // Show a confirmation dialog or navigate to another screen
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Success'),
+            content: const Text('Post submitted successfully.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }).catchError((error) {
+      // Handle errors
+      print(error);
+    });
   }
 
   @override
