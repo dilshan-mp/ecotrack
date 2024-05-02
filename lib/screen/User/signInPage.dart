@@ -1,4 +1,4 @@
-import 'package:ecotrack/Components/bottomNavBar.dart';
+import 'package:ecotrack/Components/MyBottomNavigationBar.dart';
 import 'package:ecotrack/screen/User/homePage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -17,15 +17,16 @@ class _SignInPageState extends State<SignInPage> {
   String? _email;
   String? _password;
 
-  Future<String?> authenticateUser(String username, String password) async {
-    const apiUrl = 'http://192.168.8.138:8080/authenticate';
+  Future<Map<String, dynamic>?> authenticateUser(
+      String username, String password) async {
+    const apiUrl = 'http://192.168.43.20:8080/authenticate';
 
     try {
       final response = await http.post(
         Uri.parse(apiUrl),
         headers: {
           'Content-Type': 'application/json',
-          'VERSION': 'V1', // Add any custom headers if required
+          'VERSION': 'V1',
         },
         body: json.encode({
           'username': username,
@@ -36,10 +37,13 @@ class _SignInPageState extends State<SignInPage> {
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
         final token = responseData['token'] as String?;
-        return token;
+        final userDetails = responseData['user'] as Map<String, dynamic>?;
+
+        return {'token': token, 'userDetails': userDetails};
       } else {
         // Handle authentication error
         print('Authentication failed with status: ${response.statusCode}');
+        print('weda meka');
         return null;
       }
     } catch (error) {
@@ -104,7 +108,9 @@ class _SignInPageState extends State<SignInPage> {
                           prefixIcon: const Icon(Icons.person),
                           suffixIcon: IconButton(
                             icon: Icon(
-                              _isVisible ? Icons.visibility : Icons.visibility_off,
+                              _isVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
                             ),
                             onPressed: () {
                               setState(() {
@@ -145,13 +151,15 @@ class _SignInPageState extends State<SignInPage> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      final token = await authenticateUser(_email!, _password!);
-      if (token != null) {
-        // Authentication successful, proceed to the home page or any other page
-        // Replace HomePage() with your actual home page widget
+      final authResult = await authenticateUser(_email!, _password!);
+      if (authResult != null) {
+        final token = authResult['token'];
+        final userDetails = authResult['userDetails'];
+
+        // Authentication successful, proceed to the home page with user details
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) =>  bottomNavigationBar(token:token)),
+          MaterialPageRoute(builder: (context) => MyBottomNavigationBar(token: token, userDetails: userDetails)),
         );
       } else {
         // Authentication failed, show error message or handle accordingly

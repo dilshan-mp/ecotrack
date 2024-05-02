@@ -1,57 +1,27 @@
-import 'dart:convert';
-
+import 'package:ecotrack/Components/MyBottomNavigationBar.dart';
+import 'package:ecotrack/Components/likeButton.dart';
 import 'package:ecotrack/screen/User/userProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
-  final String token;
+  final String? token;
+  final Map<String, dynamic>? userDetails;
 
-  const HomePage({Key? key, required this.token}) : super(key: key);
+  const HomePage({Key? key, required this.token, required this.userDetails}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  late String userName;
+  late Map<String, dynamic>? _userDetails;
 
   @override
   void initState() {
     super.initState();
-    _getUserInfo();
-  }
-
-  Future<void> _getUserInfo() async {
-    try {
-      final Uri apiUrl = Uri.parse('http://192.168.8.138:8080/user'); // Change this to your actual API URL
-      final response = await http.get(
-        apiUrl,
-        headers: {
-          'Authorization': 'Bearer ${widget.token}',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> userData = jsonDecode(response.body);
-        setState(() {
-          userName = userData['name'] as String;
-        });
-      } else {
-        print('Failed to fetch user data: ${response.statusCode}');
-        // Initialize userName with a default value
-        setState(() {
-          userName = 'Guest';
-        });
-      }
-    } catch (error) {
-      print('Error fetching user data: $error');
-      // Initialize userName with a default value
-      setState(() {
-        userName = 'Guest';
-      });
-    }
+    _userDetails = widget.userDetails;
   }
 
   @override
@@ -60,8 +30,8 @@ class _HomePageState extends State<HomePage> {
       home: Scaffold(
         appBar: AppBar(
           title: Text(
-            "Hello  $userName",
-            style: TextStyle(color: Colors.black),
+            "Hello ${_userDetails?['age'] ?? 'ballo'}",
+            style: const TextStyle(color: Colors.black),
           ),
           actions: [
             IconButton(
@@ -115,7 +85,10 @@ class _HomePageState extends State<HomePage> {
                         ButtonBar(
                           alignment: MainAxisAlignment.start,
                           children: [
-                            Icon(Icons.favorite_border_outlined, size: 30,)
+                            Icon(
+                              Icons.favorite_border_outlined,
+                              size: 30,
+                            )
                           ],
                         ),
                       ],
