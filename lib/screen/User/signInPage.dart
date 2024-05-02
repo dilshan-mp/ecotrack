@@ -161,6 +161,7 @@ class _SignInPageState extends State<SignInPage> {
           context,
           MaterialPageRoute(builder: (context) => MyBottomNavigationBar(token: token, userDetails: userDetails)),
         );
+        //MyBottomNavigationBar(token: token, userDetails: userDetails)),
       } else {
         // Authentication failed, show error message or handle accordingly
         ScaffoldMessenger.of(context).showSnackBar(
