@@ -25,7 +25,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   // Function to send user registration data to backend
   Future<void> registerUser() async {
-    var url = Uri.parse('http://192.168.8.138:8080/register');
+    var url = Uri.parse('http://192.168.43.20:8080/register');
     var headers = {
       'Content-Type': 'application/json',
       'VERSION': 'V1',

@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
       home: Scaffold(
         appBar: AppBar(
           title: Text(
-            "Hello ${_userDetails?['age'] ?? 'ballo'}",
+            "Hello ${_userDetails?['name'] ?? ''}",
             style: const TextStyle(color: Colors.black),
           ),
           actions: [
