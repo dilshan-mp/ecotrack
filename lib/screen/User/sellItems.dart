@@ -1,18 +1,21 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecotrack/style/button.dart';
+import 'package:ecotrack/style/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class AdminPost extends StatefulWidget {
-  const AdminPost({Key? key}) : super(key: key);
+class SellItems extends StatefulWidget {
+  const SellItems({super.key});
 
   @override
-  State<AdminPost> createState() => _AdminPostState();
+  State<SellItems> createState() => _SellItemsState();
 }
 
-class _AdminPostState extends State<AdminPost> {
+class _SellItemsState extends State<SellItems> {
   late TextEditingController _descriptionController;
+  late TextEditingController _priceController; // Add this line for price
   late DateTime _selectedDate;
   late File? _imageFile;
 
@@ -20,6 +23,7 @@ class _AdminPostState extends State<AdminPost> {
   void initState() {
     super.initState();
     _descriptionController = TextEditingController();
+    _priceController = TextEditingController(); // Initialize the price controller
     _selectedDate = DateTime.now();
     _imageFile = null;
   }
@@ -28,7 +32,7 @@ class _AdminPostState extends State<AdminPost> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Post'),
+        title: const Text('Sell Items'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -60,6 +64,19 @@ class _AdminPostState extends State<AdminPost> {
             ),
             const SizedBox(height: 20),
             const Text(
+              'Price',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            TextFormField(
+              controller: _priceController, // Connect the controller
+              keyboardType: TextInputType.numberWithOptions(decimal: true), // Set keyboard type to number with decimal
+              decoration: const InputDecoration(
+                hintText: '0.00',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
               'Date',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
@@ -82,17 +99,21 @@ class _AdminPostState extends State<AdminPost> {
               ),
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-               Map<String,dynamic>addpost={
-                'Image':"",
-                'Description':"",
-                'Date':"",
-               };
-               CollectionReference collectionReference = FirebaseFirestore.instance.collection('Admin_Post');
-               collectionReference.add(addpost);
-              },
-              child: const Text('Submit'),
+            Center(
+              child: ElevatedButton(
+                  onPressed: () {
+                    Map<String, dynamic> addpost = {
+                      'Image': "",
+                      'Description': _descriptionController.text, // Use entered description
+                      'Price': double.parse(_priceController.text), // Convert entered price to double
+                      'Date': _selectedDate,
+                    };
+                    CollectionReference collectionReference =
+                        FirebaseFirestore.instance.collection('Admin_Post');
+                    collectionReference.add(addpost);
+                  },
+                  style: mainButtton,
+                  child: const Text('Submit')),
             ),
           ],
         ),
@@ -116,7 +137,8 @@ class _AdminPostState extends State<AdminPost> {
 
   Future<void> _pickImage() async {
     final ImagePicker _picker = ImagePicker();
-    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    final XFile? pickedFile =
+        await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
         _imageFile = File(pickedFile.path);
@@ -127,6 +149,7 @@ class _AdminPostState extends State<AdminPost> {
   @override
   void dispose() {
     _descriptionController.dispose();
+    _priceController.dispose(); // Dispose price controller
     super.dispose();
   }
 }

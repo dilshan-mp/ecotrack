@@ -1,3 +1,4 @@
+import 'package:ecotrack/Components/bottomNavBar.dart';
 import 'package:ecotrack/screen/User/homePage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -150,7 +151,7 @@ class _SignInPageState extends State<SignInPage> {
         // Replace HomePage() with your actual home page widget
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
+          MaterialPageRoute(builder: (context) => const bottomNavigationBar()),
         );
       } else {
         // Authentication failed, show error message or handle accordingly
