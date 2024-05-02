@@ -1,12 +1,13 @@
-import 'package:ecotrack/Components/bottomNavBar.dart';
+import 'package:ecotrack/Components/MyBottomNavigationBar.dart';
 import 'package:ecotrack/Components/likeButton.dart';
 import 'package:ecotrack/screen/User/userProfile.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
+  final String? token;
   final Map<String, dynamic>? userDetails;
 
-  const HomePage({Key? key, this.userDetails}) : super(key: key);
+  const HomePage({Key? key, required this.token, required this.userDetails}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -27,7 +28,7 @@ class _HomePageState extends State<HomePage> {
       home: Scaffold(
         appBar: AppBar(
           title: Text(
-            "Hello ${_userDetails?['name'] ?? 'ballo'}",
+            "Hello ${_userDetails?['age'] ?? 'ballo'}",
             style: const TextStyle(color: Colors.black),
           ),
           actions: [

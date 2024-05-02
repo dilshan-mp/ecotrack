@@ -6,21 +6,30 @@ import 'package:ecotrack/screen/User/storePages.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 // ignore: camel_case_types
-class bottomNavigationBar extends StatefulWidget {
-  const bottomNavigationBar({super.key});
+class MyBottomNavigationBar extends StatefulWidget {
+  final String? token;
+  final Map<String, dynamic>? userDetails;
+
+  const MyBottomNavigationBar({Key? key, required this.token, required this.userDetails}) : super(key: key);
 
   @override
-  State<bottomNavigationBar> createState() => _bottomNavigationBarState();
+  State<MyBottomNavigationBar> createState() => _MyBottomNavigationBar();
 }
 
-// ignore: camel_case_types
-class _bottomNavigationBarState extends State<bottomNavigationBar> {
+class _MyBottomNavigationBar extends State<MyBottomNavigationBar> {
   int _selectedIndex = 0;
-  final List<Widget> _pages = [
-    const HomePage(),
-    const DisposalRequest(),
-    StorePage(),
-  ];
+  late List<Widget> _pages;
+
+  @override
+  void initState() {
+    super.initState();
+    _pages = [
+      HomePage(token: widget.token, userDetails: widget.userDetails),
+      DisposalRequest(),
+      StorePage(),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
