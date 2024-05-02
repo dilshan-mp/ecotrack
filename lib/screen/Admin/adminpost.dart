@@ -1,12 +1,14 @@
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:http/http.dart' as http;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:convert'; // Add this import statement
 
 class AdminPost extends StatefulWidget {
-  const AdminPost({Key? key}) : super(key: key);
+  final String? token;
+  final Map<String, dynamic>? userDetails;
+  const AdminPost({Key? key, required this.token, required this.userDetails}) : super(key: key);
 
   @override
   State<AdminPost> createState() => _AdminPostState();
@@ -85,7 +87,7 @@ class _AdminPostState extends State<AdminPost> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                _uploadImage();
+                _uploadData();
               },
               child: const Text('Submit'),
             ),
@@ -120,30 +122,43 @@ class _AdminPostState extends State<AdminPost> {
     }
   }
 
-  Future<void> _uploadImage() async {
-    if (_imageFile == null) {
-      return; // No image selected
+  Future<void> _uploadData() async {
+  if (_imageFile == null) {
+    return; // No image selected
+  }
+
+  // Upload image to Firebase Storage
+  final Reference storageReference =
+      FirebaseStorage.instance.ref().child('images/${DateTime.now()}.png');
+  final UploadTask uploadTask = storageReference.putFile(_imageFile!);
+  await uploadTask.whenComplete(() async {
+    // Retrieve the URL of the uploaded image
+    final String imageURL = await storageReference.getDownloadURL();
+
+    // Create payload for sending to backend
+    final Map<String, dynamic> payload = {
+      'imagePath': imageURL,
+      'description': _descriptionController.text,
+      'date': _selectedDate.toIso8601String(),
+    };
+
+    // Include user details from userDetails
+    if (widget.userDetails != null) {
+      payload['userId'] = widget.userDetails!['userId'];
+      payload['email'] = widget.userDetails!['email'];
+      // Add other user details as needed
     }
 
-    // Upload image to Firebase Storage
-    final Reference storageReference =
-        FirebaseStorage.instance.ref().child('images/${DateTime.now()}.png');
-    final UploadTask uploadTask = storageReference.putFile(_imageFile!);
-    await uploadTask.whenComplete(() async {
-      // Retrieve the URL of the uploaded image
-      final String imageURL = await storageReference.getDownloadURL();
+    // Send data to backend API
+    final response = await http.post(
+      Uri.parse('http://192.168.8.138:8080/admins/notices'), // Replace with your actual endpoint
+      body: jsonEncode(payload),
+      headers: {'Content-Type': 'application/json',
+      'VERSION': 'V1',},
+    );
 
-      // Store image URL along with other details in Firestore
-      final Map<String, dynamic> addpost = {
-        'Image': imageURL,
-        'Description': _descriptionController.text,
-        'Date': _selectedDate,
-      };
-      CollectionReference collectionReference =
-          FirebaseFirestore.instance.collection('Admin_Post');
-      await collectionReference.add(addpost);
-
-      // Clear the fields after successful submission
+    if (response.statusCode == 200) {
+      // Clear fields after successful submission
       setState(() {
         _imageFile = null;
         _descriptionController.clear();
@@ -168,11 +183,17 @@ class _AdminPostState extends State<AdminPost> {
           );
         },
       );
-    }).catchError((error) {
+    } else {
       // Handle errors
-      print(error);
-    });
-  }
+      print('Error uploading data: ${response.reasonPhrase}');
+    }
+  }).catchError((error) {
+    // Handle errors
+    print(error);
+  });
+}
+
+
 
   @override
   void dispose() {

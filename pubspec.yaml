@@ -58,6 +58,7 @@ flutter:
     - asset/Icons/SVG/req-svgrepo-com.svg
     - asset/Icons/SVG/locate-svgrepo-com.svg
     - asset/Icons/SVG/map-svgrepo-com.svg
+    - asset/Icons/SVG/route-svgrepo-com.svg
   
   fonts:
     - family: Poppins-Bold

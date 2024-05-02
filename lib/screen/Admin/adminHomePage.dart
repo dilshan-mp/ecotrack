@@ -1,11 +1,16 @@
+import 'package:ecotrack/screen/Admin/Routes.dart';
 import 'package:ecotrack/screen/Admin/addDisposalPlaces.dart';
+import 'package:ecotrack/screen/Admin/addRout.dart';
 import 'package:ecotrack/screen/Admin/addTruckDriver.dart';
 import 'package:ecotrack/screen/Admin/adminpost.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class AdminHomePage extends StatelessWidget {
-  const AdminHomePage({Key? key}) : super(key: key);
+
+    final String? token;
+  final Map<String, dynamic>? userDetails;
+  const AdminHomePage({Key? key, required this.token, required this.userDetails}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,57 +33,70 @@ class AdminHomePage extends StatelessWidget {
           ],
         ),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            buildButton(
-              context,
-              'Add Post',
-              'asset/Icons/SVG/post-it-svgrepo-com.svg', // Add your icon path
-              () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const AdminPost ()));
-              },
-            ),
-            SizedBox(height: 20),
-            buildButton(
-              context,
-              'Add Disposal Point',
-              'asset/Icons/SVG/garbage-trash-svgrepo-com.svg', // Add your icon path
-              () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const AddDisposalPlaces()));
-              },
-            ),
-           SizedBox(height: 20),
-            buildButton(
-              context,
-              'Add Truck Driver',
-              'asset/Icons/SVG/truck-delivery-svgrepo-com.svg', // Add your icon path
-              () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AddTruckDriverScreen()));
-              },
-            ),
-            SizedBox(height: 20),
-            buildButton(
-              context,
-              'View Complain',
-              'asset/Icons/SVG/complain-ecommerce-market-svgrepo-com.svg', // Add your icon path
-              () {
-                // Add your functionality here
-              },
-            ),
-            SizedBox(height: 20),
-            buildButton(
-              context,
-              'Edit Profile Request',
-              'asset/Icons/SVG/edit-user-svgrepo-com.svg', // Add your icon path
-              () {
-                // Add your functionality here
-              },
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              buildButton(
+                context,
+                'Add Post',
+                'asset/Icons/SVG/post-it-svgrepo-com.svg', // Add your icon path
+                () {
+                  Navigator.push(context,
+                      
+                      MaterialPageRoute(builder: (context) => AdminPost(token: token, userDetails: userDetails)));
+                },
+              ),
+              SizedBox(height: 20),
+              buildButton(
+                context,
+                'Add Disposal Point',
+                'asset/Icons/SVG/garbage-trash-svgrepo-com.svg', // Add your icon path
+                () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const AddDisposalPlaces()));
+                },
+              ),
+               SizedBox(height: 20),
+              buildButton(
+                context,
+                'Route',
+                'asset/Icons/SVG/route-svgrepo-com.svg', // Add your icon path
+                () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Routes(token: token, userDetails: userDetails)));
+                },
+              ),
+             SizedBox(height: 20),
+              buildButton(
+                context,
+                'Add Truck Driver',
+                'asset/Icons/SVG/truck-delivery-svgrepo-com.svg', // Add your icon path
+                () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AddTruckDriverScreen()));
+                },
+              ),
+              SizedBox(height: 20),
+              buildButton(
+                context,
+                'View Complain',
+                'asset/Icons/SVG/complain-ecommerce-market-svgrepo-com.svg', // Add your icon path
+                () {
+                  // Add your functionality here
+                },
+              ),
+              SizedBox(height: 20),
+              buildButton(
+                context,
+                'Edit Profile Request',
+                'asset/Icons/SVG/edit-user-svgrepo-com.svg', // Add your icon path
+                () {
+                  // Add your functionality here
+                },
+              ),
+              
+            ],
+          ),
         ),
       ),
     );
