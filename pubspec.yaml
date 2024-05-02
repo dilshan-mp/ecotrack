@@ -53,6 +53,10 @@ flutter:
     - asset/Icons/SVG/senior-man-driving-a-car-svgrepo-com.svg
     - asset/Icons/SVG/truck-delivery-svgrepo-com.svg
     - asset/Icons/SVG/complain-ecommerce-market-svgrepo-com.svg
+    - asset/Icons/SVG/req-svgrepo-com.svg
+    - asset/Icons/SVG/locate-svgrepo-com.svg
+    - asset/Icons/SVG/map-svgrepo-com.svg
+  
   fonts:
     - family: Poppins-Bold
       fonts:

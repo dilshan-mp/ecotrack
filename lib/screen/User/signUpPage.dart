@@ -1,3 +1,4 @@
+import 'package:ecotrack/screen/User/signInPage.dart';
 import 'package:ecotrack/style/colors.dart';
 import 'package:ecotrack/style/text.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,9 @@ class _SignUpPageState extends State<SignUpPage> {
   String _zip = '';
   String _password = '';
   String _reEnterPassword = '';
+  String _role = 'User';
+
+   final List<String> _roles = ['User', 'Truck Driver'];
 
   @override
   Widget build(BuildContext context) {
@@ -86,11 +90,11 @@ class _SignUpPageState extends State<SignUpPage> {
                         _phoneNumber = value!;
                       },
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     TextFormField(
                       decoration: InputDecoration(
                         labelText: "Address Line 01",
-                        prefixIcon: Icon(Icons.location_on),
+                        prefixIcon: const Icon(Icons.location_on),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14),
                         ),
@@ -105,11 +109,11 @@ class _SignUpPageState extends State<SignUpPage> {
                         _addressLine1 = value!;
                       },
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     TextFormField(
                       decoration: InputDecoration(
                         labelText: "Address Line 02",
-                        prefixIcon: Icon(Icons.location_on),
+                        prefixIcon: const Icon(Icons.location_on),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14),
                         ),
@@ -118,11 +122,11 @@ class _SignUpPageState extends State<SignUpPage> {
                         _addressLine2 = value!;
                       },
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     TextFormField(
                       decoration: InputDecoration(
                         labelText: "City",
-                        prefixIcon: Icon(Icons.location_city),
+                        prefixIcon: const Icon(Icons.location_city),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14),
                         ),
@@ -207,30 +211,61 @@ class _SignUpPageState extends State<SignUpPage> {
                         _password = value!;
                       },
                     ),
-                    SizedBox(height: 10),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: "Re-Enter Password",
-                        prefixIcon: Icon(Icons.lock),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                      ),
-                      obscureText: true,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please re-enter your password';
-                        }
-                        if (value != _password) {
-                          return 'Passwords do not match';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        _reEnterPassword = value!;
-                      },
+                    // SizedBox(height: 10),
+                    // TextFormField(
+                    //   decoration: InputDecoration(
+                    //     labelText: "Re-Enter Password",
+                    //     prefixIcon: Icon(Icons.lock),
+                    //     border: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(14),
+                    //     ),
+                    //   ),
+                    //   obscureText: true,
+                    //   validator: (value) {
+                    //     if (value == null || value.isEmpty) {
+                    //       return 'Please re-enter your password';
+                    //     }
+                    //     if (value != _password) {
+                    //       return 'Passwords do not match';
+                    //     }
+                    //     return null;
+                    //   },
+                    //   onSaved: (value) {
+                    //     _reEnterPassword = value!;
+                    //   },
+                    // ),
+                        SizedBox(height: 10),
+                // Add DropdownButtonFormField for selecting role
+                DropdownButtonFormField<String>(
+                  value: _role,
+                  decoration: InputDecoration(
+                    labelText: 'Role',
+                    prefixIcon: Icon(Icons.person),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
                     ),
-                    SizedBox(height: 10),
+                  ),
+                  items: _roles.map((role) {
+                    return DropdownMenuItem<String>(
+                      value: role,
+                      child: Text(role),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _role = value!;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please select a role';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _role = value!;
+                  },
+                ),
                   ],
                 ),
               ),
@@ -239,7 +274,9 @@ class _SignUpPageState extends State<SignUpPage> {
           Padding(
             padding: const EdgeInsets.all(20),
             child: ElevatedButton(
-              onPressed: _submitForm,
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>SignInPage()));
+              },
               style: ElevatedButton.styleFrom(
                 //primary: Colors.green,
                 padding: EdgeInsets.zero,
