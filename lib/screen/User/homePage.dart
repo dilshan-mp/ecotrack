@@ -1,5 +1,6 @@
 import 'package:ecotrack/Components/bottomNavBar.dart';
 import 'package:ecotrack/Components/likeButton.dart';
+import 'package:ecotrack/screen/User/userProfile.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -31,7 +32,9 @@ class _HomePageState extends State<HomePage> {
           ),
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>const UserProfile()));
+              }, 
               icon: const Icon(Icons.person),
             )
           ],

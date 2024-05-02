@@ -11,9 +11,8 @@ class FirstPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(),
-        body: Center(
-          child: Container(
+         body: Center(
+           child: Container(
             margin: const EdgeInsets.all(15.0),
             width: 350,
             child: Column(

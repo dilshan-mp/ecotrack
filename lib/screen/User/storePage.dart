@@ -20,6 +20,7 @@ class _StorePageState extends State<StorePage> {
         backgroundColor: Colors.white,
         elevation: 0,
         title: const Text("Store",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30),),
+        leading: null,
       ),
       body: Column(
         children: [
