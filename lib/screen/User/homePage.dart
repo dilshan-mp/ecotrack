@@ -3,25 +3,35 @@ import 'package:ecotrack/Components/likeButton.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key); // Fix here
+  final Map<String, dynamic>? userDetails;
+
+  const HomePage({Key? key, this.userDetails}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  late Map<String, dynamic>? _userDetails;
+
+  @override
+  void initState() {
+    super.initState();
+    _userDetails = widget.userDetails;
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            "Hello Dilshan",
-            style: TextStyle(color: Colors.black),
+          title: Text(
+            "Hello ${_userDetails?['name'] ?? 'ballo'}",
+            style: const TextStyle(color: Colors.black),
           ),
           actions: [
             IconButton(
-              onPressed: () {}, 
+              onPressed: () {},
               icon: const Icon(Icons.person),
             )
           ],
@@ -61,12 +71,15 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                     const Row(
+                    const Row(
                       children: [
                         ButtonBar(
                           alignment: MainAxisAlignment.start,
                           children: [
-                            Icon(Icons.favorite_border_outlined,size: 30,)
+                            Icon(
+                              Icons.favorite_border_outlined,
+                              size: 30,
+                            )
                           ],
                         ),
                       ],
@@ -81,4 +94,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-

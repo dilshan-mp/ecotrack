@@ -1,3 +1,4 @@
+import 'package:ecotrack/Components/bottomNavBar.dart';
 import 'package:ecotrack/screen/User/homePage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -17,7 +18,7 @@ class _SignInPageState extends State<SignInPage> {
   String? _password;
 
   Future<String?> authenticateUser(String username, String password) async {
-    const apiUrl = 'http://192.168.8.138:8080/authenticate';
+    const apiUrl = 'http://192.168.43.20:8080/authenticate';
 
     try {
       final response = await http.post(
@@ -35,10 +36,12 @@ class _SignInPageState extends State<SignInPage> {
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
         final token = responseData['token'] as String?;
+        
         return token;
       } else {
         // Handle authentication error
         print('Authentication failed with status: ${response.statusCode}');
+        print('weda meka');
         return null;
       }
     } catch (error) {
@@ -150,7 +153,7 @@ class _SignInPageState extends State<SignInPage> {
         // Replace HomePage() with your actual home page widget
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
+          MaterialPageRoute(builder: (context) => const bottomNavigationBar()),
         );
       } else {
         // Authentication failed, show error message or handle accordingly
