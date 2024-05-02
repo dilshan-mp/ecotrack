@@ -14,49 +14,47 @@ class _UserProfileState extends State<UserProfile> {
       appBar: AppBar(
         title: const Text("Dilsha Madushanka"),
       ),
-      body:Container(
-        child: ListView(
-          scrollDirection: Axis.vertical,
-          children:  [
-            Divider(),
-            ListTile(
-              leading: Icon(Icons.edit_attributes,color: Colors.blue,),
-              title: Text('Edit Profile'),
-              subtitle: Text("change youe personal details"),
-              trailing: Icon(Icons.menu),
-              onTap: (){
-              },
-            ),
-            Divider(),
-             ListTile(
-              leading: Icon(Icons.sell,color: Colors.green,),
-              title: const Text('Sell'),
-              subtitle: Text("Sell Your Iteams"),
-              trailing: Icon(Icons.menu,),
-              onTap: (){
-              },
-            ),
-             Divider(),
-             ListTile(
-              leading: Icon(Icons.report,color: Colors.red,),
-              title: Text('Report'),
-              subtitle: Text("Check your selling details"),
-              trailing: Icon(Icons.menu),
-              onTap: (){
-              },
-            ),
-            Divider(),
-             ListTile(
-              leading: Icon(Icons.message,color: Colors.lime,),
-              title: Text('Complain'),
-              subtitle: Text("submit your complain "),
-              trailing: Icon(Icons.menu),
-              onTap: (){
-              },
-            ),
-           
-          ],
-        ),
+      body:ListView(
+        scrollDirection: Axis.vertical,
+        children:  [
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.edit_attributes,color: Colors.blue,),
+            title: const Text('Edit Profile'),
+            subtitle: const Text("change youe personal details"),
+            trailing: const Icon(Icons.menu),
+            onTap: (){
+            },
+          ),
+          const Divider(),
+           ListTile(
+            leading: const Icon(Icons.sell,color: Colors.green,),
+            title: const Text('Sell'),
+            subtitle: const Text("Sell Your Iteams"),
+            trailing: const Icon(Icons.menu,),
+            onTap: (){
+            },
+          ),
+           const Divider(),
+           ListTile(
+            leading: const Icon(Icons.report,color: Colors.red,),
+            title: const Text('Report'),
+            subtitle: const Text("Check your selling details"),
+            trailing: const Icon(Icons.menu),
+            onTap: (){
+            },
+          ),
+          const Divider(),
+           ListTile(
+            leading: const Icon(Icons.message,color: Colors.lime,),
+            title: const Text('Complain'),
+            subtitle: const Text("submit your complain "),
+            trailing: const Icon(Icons.menu),
+            onTap: (){
+            },
+          ),
+         
+        ],
       ) ,
     );
   }
