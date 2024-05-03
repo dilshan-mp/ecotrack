@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class TruckDriverHomePage extends StatelessWidget {
-  const TruckDriverHomePage({Key? key}) : super(key: key);
+  final String? token;
+  final Map<String, dynamic>? userDetails;
+  const TruckDriverHomePage({Key? key, required this.token, required this.userDetails}) : super(key: key);
 
 
   @override
