@@ -1,7 +1,9 @@
+import 'package:ecotrack/screen/TruckDriver/Route1.dart';
 import 'package:flutter/material.dart';
 
+
 class CheckRequest extends StatefulWidget {
-  const CheckRequest({super.key});
+  const CheckRequest({Key? key});
 
   @override
   State<CheckRequest> createState() => _CheckRequestState();
@@ -14,91 +16,133 @@ class _CheckRequestState extends State<CheckRequest> {
       appBar: AppBar(
         title: const Row(
           children: [
-            Text("Check",style: TextStyle(fontWeight: FontWeight.bold),),
-            SizedBox(width: 5,),
-            Text("Request",style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),)
+            Text(
+              "Check",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            SizedBox(width: 5),
+            Text(
+              "Request",
+              style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+            )
           ],
         ),
       ),
       body: ListView(
-        children:  [
+        children: [
           SizedBox(
             height: 80,
             child: Padding(
-              padding: const EdgeInsets.only(left: 20,right: 20),
+              padding: const EdgeInsets.only(left: 20, right: 20),
               child: ElevatedButton(
-                onPressed: (){},
+                onPressed: () {
+                  // Navigate to Route1Page when Route A is clicked
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Route1()),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)
-                  )
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
                 child: const Row(
                   children: [
                     Padding(
                       padding: EdgeInsets.only(left: 25),
-                      child: Text("Route A",style: TextStyle(fontSize: 25),),
+                      child: Text(
+                        "Route A",
+                        style: TextStyle(fontSize: 25),
+                      ),
                     ),
                     Spacer(),
                     Padding(
                       padding: EdgeInsets.only(right: 30),
-                      child: Text("75%",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),),
+                      child: Text(
+                        "75%",
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                      ),
                     )
                   ],
                 ),
               ),
             ),
           ),
-          SizedBox(height: 20,),
+          SizedBox(height: 20),
           SizedBox(
             height: 80,
             child: Padding(
-              padding: const EdgeInsets.only(left: 20,right: 20),
+              padding: const EdgeInsets.only(left: 20, right: 20),
               child: ElevatedButton(
-                onPressed: (){},
+                onPressed: () {
+                  // Navigate to Route1Page when Route B is clicked
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Route1()),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)
-                  )
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
                 child: const Row(
                   children: [
                     Padding(
                       padding: EdgeInsets.only(left: 25),
-                      child: Text("Route B",style: TextStyle(fontSize: 25),),
+                      child: Text(
+                        "Route B",
+                        style: TextStyle(fontSize: 25),
+                      ),
                     ),
                     Spacer(),
                     Padding(
                       padding: EdgeInsets.only(right: 30),
-                      child: Text("50%",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),),
+                      child: Text(
+                        "50%",
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                      ),
                     )
                   ],
                 ),
               ),
             ),
           ),
-          const SizedBox(height: 20,),
+          const SizedBox(height: 20),
           SizedBox(
             height: 80,
             child: Padding(
-              padding: const EdgeInsets.only(left: 20,right: 20),
+              padding: const EdgeInsets.only(left: 20, right: 20),
               child: ElevatedButton(
-                onPressed: (){},
+                onPressed: () {
+                  // Navigate to Route1Page when Route C is clicked
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Route1()),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)
-                  )
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
                 child: const Row(
                   children: [
                     Padding(
                       padding: EdgeInsets.only(left: 25),
-                      child: Text("Route C",style: TextStyle(fontSize: 25),),
+                      child: Text(
+                        "Route C",
+                        style: TextStyle(fontSize: 25),
+                      ),
                     ),
                     Spacer(),
                     Padding(
                       padding: EdgeInsets.only(right: 30),
-                      child: Text("25%",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),),
+                      child: Text(
+                        "25%",
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                      ),
                     )
                   ],
                 ),
