@@ -1,9 +1,10 @@
-import 'package:ecotrack/Components/MyBottomNavigationBar.dart';
-import 'package:ecotrack/Components/likeButton.dart';
+import 'dart:convert';
+
+import 'package:ecotrack/ipconfig.dart';
 import 'package:ecotrack/screen/User/userProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:like_button/like_button.dart';
 
 class HomePage extends StatefulWidget {
   final String? token;
@@ -17,11 +18,29 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late Map<String, dynamic>? _userDetails;
+  late List<Map<String, dynamic>> _notices = [];
 
   @override
   void initState() {
     super.initState();
     _userDetails = widget.userDetails;
+    _fetchNotices();
+  }
+
+  Future<void> _fetchNotices() async {
+    final response = await http.get(
+      Uri.parse('$localhost/notices2'), // Replace with your actual endpoint
+      headers: {'Authorization': 'Bearer ${widget.token}'},
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      setState(() {
+        _notices = List<Map<String, dynamic>>.from(data);
+      });
+    } else {
+      print('Failed to fetch notices with status: ${response.statusCode}');
+    }
   }
 
   @override
@@ -46,8 +65,9 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         body: ListView.builder(
-          itemCount: 12,
+          itemCount: _notices.length,
           itemBuilder: (BuildContext context, int index) {
+            final notice = _notices[index];
             return Card(
               child: SizedBox(
                 height: 350,
@@ -55,17 +75,17 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     ListTile(
                       leading: const CircleAvatar(),
-                      title: const Text("this is first notice"),
+                      title: Text(notice['title'] ?? ''),
                       subtitle: Text(
-                        "this is a subtitle",
-                        style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                        notice['subtitle'] ?? '',
+                        style:TextStyle(color: Colors.black.withOpacity(0.6)),
                       ),
                     ),
                     Expanded(
                       child: Container(
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: AssetImage("asset/images/feed1.jpg"),
+                            image: NetworkImage(notice['imagePath'] ?? ''),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -75,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                     Padding(
                       padding: const EdgeInsets.only(top: 5, left: 8, right: 8),
                       child: Text(
-                        'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
+                        notice['description'] ?? '',
                         style: TextStyle(color: Colors.black.withOpacity(0.6)),
                       ),
                     ),
@@ -85,10 +105,7 @@ class _HomePageState extends State<HomePage> {
                         ButtonBar(
                           alignment: MainAxisAlignment.start,
                           children: [
-                            Icon(
-                              Icons.favorite_border_outlined,
-                              size: 30,
-                            )
+                            LikeButton(), // Add your like button widget here
                           ],
                         ),
                       ],
