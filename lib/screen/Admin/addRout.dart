@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:ecotrack/ipconfig.dart';
+import 'package:ecotrack/screen/Admin/Routes.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -32,7 +34,7 @@ class AddRoute extends StatefulWidget {
 }
 
 class _AddRouteState extends State<AddRoute> {
-  final _formKey = GlobalKey<FormState>();
+  final  _formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController latitudeController = TextEditingController();
   TextEditingController longitudeController = TextEditingController();
@@ -48,7 +50,7 @@ class _AddRouteState extends State<AddRoute> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.43.180:8080/routes'),
+        Uri.parse('$localhost/routes'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ${widget.token}',
@@ -73,7 +75,7 @@ class _AddRouteState extends State<AddRoute> {
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Routes(token: widget.token, userDetails: widget.userDetails)));
                   },
                   child: const Text('OK'),
                 ),

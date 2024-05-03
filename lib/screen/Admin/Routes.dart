@@ -1,7 +1,32 @@
 import 'dart:convert';
+import 'package:ecotrack/ipconfig.dart';
+import 'package:ecotrack/screen/Admin/addRout.dart';
+import 'package:ecotrack/screen/Admin/adminHomePage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
+
+class RouteResponseDTO {
+  final int id;
+  final String name;
+  final double latitude;
+  final double longitude;
+
+  RouteResponseDTO({
+    required this.id,
+    required this.name,
+    required this.latitude,
+    required this.longitude,
+  });
+
+  factory RouteResponseDTO.fromJson(Map<String, dynamic> json) {
+    return RouteResponseDTO(
+      id: json['id'] as int,
+      name: json['name'] as String,
+      latitude: json['latitude'] as double,
+      longitude: json['longitude'] as double,
+    );
+  }
+}
 
 class Routes extends StatefulWidget {
   final String? token;
@@ -20,12 +45,11 @@ class _RoutesState extends State<Routes> {
   @override
   void initState() {
     super.initState();
-    // Fetch routes data when the widget is initialized
     fetchRoutesData();
   }
 
   Future<void> fetchRoutesData() async {
-    final apiUrl = 'http://192.168.43.180:8080/route';
+    final apiUrl = '$localhost/route';
 
     try {
       final response = await http.get(
@@ -38,20 +62,42 @@ class _RoutesState extends State<Routes> {
       );
 
       if (response.statusCode == 200) {
-        // Parse response data
         final List<dynamic> responseData = json.decode(response.body);
         setState(() {
-          // Update routesData list with parsed data
           routesData = responseData
               .map((route) => RouteResponseDTO.fromJson(route))
               .toList();
         });
       } else {
-        // Handle error scenario
         print('Failed to fetch routes data with status: ${response.statusCode}');
       }
     } catch (error) {
-      // Handle network or other errors
+      print('Error: $error');
+    }
+  }
+
+  Future<void> deleteRoute(int routeId) async {
+    final apiUrl = '$localhost/routes/$routeId';
+
+    try {
+      final response = await http.delete(
+        Uri.parse(apiUrl),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${widget.token}',
+          'VERSION': 'V1',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          routesData.removeWhere((route) => route.id == routeId);
+        });
+        print('Route deleted successfully');
+      } else {
+        print('Failed to delete route with status: ${response.statusCode}');
+      }
+    } catch (error) {
       print('Error: $error');
     }
   }
@@ -59,10 +105,14 @@ class _RoutesState extends State<Routes> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Routes")),
+      appBar: AppBar(title: const Text("Routes"),
+      leading: IconButton(onPressed: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>AdminHomePage(token: widget.token, userDetails: widget.userDetails)));
+      }, icon: Icon(Icons.arrow_back))
+      ),
       body: Center(
         child: Padding(
-          padding: EdgeInsets.all(15),
+          padding: const EdgeInsets.all(15),
           child: Table(
             border: TableBorder.all(color: const Color.fromARGB(77, 7, 7, 7)),
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
@@ -92,7 +142,14 @@ class _RoutesState extends State<Routes> {
                       padding: EdgeInsets.all(8.0),
                       child: Text("Longitude"),
                     ),
-                  )
+                  ),
+                  TableCell(
+                    verticalAlignment: TableCellVerticalAlignment.middle,
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text("Actions"),
+                    ),
+                  ),
                 ],
               ),
               ...routesData.map((route) {
@@ -118,35 +175,45 @@ class _RoutesState extends State<Routes> {
                       child: Text(route.longitude.toString()),
                     ),
                   ),
-                ]);
-              }),
+                  TableCell(
+                    verticalAlignment: TableCellVerticalAlignment.middle,
+                    child: Column(
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.edit,color: Colors.green,size: 30,),
+                          onPressed: () {
+                            // Implement edit functionality
+                          },
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: IconButton(
+                            icon: Icon(Icons.delete,color: Colors.red,size: 30,),
+                            onPressed: () {
+                              deleteRoute(route.id);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ]
+               );
+              }
+              ),
             ],
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(onPressed: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>AddRoute(token: widget.token, userDetails: widget.userDetails
+        )
+      )
     );
-  }
-}
-
-class RouteResponseDTO {
-  final int id;
-  final String name;
-  final double latitude;
-  final double longitude;
-
-  RouteResponseDTO({
-    required this.id,
-    required this.name,
-    required this.latitude,
-    required this.longitude,
-  });
-
-  factory RouteResponseDTO.fromJson(Map<String, dynamic> json) {
-    return RouteResponseDTO(
-      id: json['id'] ?? 0,
-      name: json['name'] ?? '',
-      latitude: json['latitude'] ?? 0.0,
-      longitude: json['longitude'] ?? 0.0,
+  },
+  child: const Icon(Icons.arrow_forward_rounded),
+  ),
+  floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 }

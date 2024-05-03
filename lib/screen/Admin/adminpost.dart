@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:ecotrack/ipconfig.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -151,7 +152,7 @@ class _AdminPostState extends State<AdminPost> {
 
     // Send data to backend API
     final response = await http.post(
-      Uri.parse('http://192.168.8.138:8080/admins/notices'), // Replace with your actual endpoint
+      Uri.parse('$localhost/admins/notices'), // Replace with your actual endpoint
       body: jsonEncode(payload),
       headers: {'Content-Type': 'application/json',
       'VERSION': 'V1',},

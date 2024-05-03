@@ -1,6 +1,5 @@
 import 'dart:convert';
-import 'package:ecotrack/style/button.dart';
-import 'package:ecotrack/style/text.dart';
+import 'package:ecotrack/ipconfig.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,15 +12,40 @@ class AddDisposalPlaces extends StatefulWidget {
 
 class _AddDisposalPlacesState extends State<AddDisposalPlaces> {
   final _formKey = GlobalKey<FormState>(); // Add form key
-
-  // Backend API endpoint
-  final String apiUrl = 'http://192.168.8.138:8080/routes/{route_id}/disposalPlaces'; // Replace with your actual endpoint
-
-  // TextEditingController for form fields
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController routeIdController = TextEditingController();
+  final String apiUrl = '$localhost/routes'; // Route API endpoint
   final TextEditingController latitudeController = TextEditingController();
   final TextEditingController longitudeController = TextEditingController();
+  String? selectedRouteId;
+
+  List<String> routeNames = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchRouteNames();
+  }
+
+  Future<void> fetchRouteNames() async {
+    try {
+      final response = await http.get(
+        Uri.parse(apiUrl),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> responseData = json.decode(response.body);
+        setState(() {
+          routeNames = responseData.map((route) => route['name'].toString()).toList();
+        });
+      } else {
+        print('Failed to fetch route names with status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,28 +67,21 @@ class _AddDisposalPlacesState extends State<AddDisposalPlaces> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      TextFormField(
-                        controller: nameController,
-                        decoration: InputDecoration(
-                          labelText: "Name",
-                          contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          prefixIcon: const Icon(Icons.place),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a name';
-                          }
-                          return null;
+                      DropdownButtonFormField<String>(
+                        value: selectedRouteId,
+                        items: routeNames.map((routeName) {
+                          return DropdownMenuItem<String>(
+                            value: routeName,
+                            child: Text(routeName),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            selectedRouteId = value;
+                          });
                         },
-                      ),
-                      const SizedBox(height: 30),
-                      TextFormField(
-                        controller: routeIdController,
                         decoration: InputDecoration(
-                          labelText: "Route ID",
+                          labelText: "Route",
                           contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(14),
@@ -73,7 +90,7 @@ class _AddDisposalPlacesState extends State<AddDisposalPlaces> {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter a route ID';
+                            return 'Please select a route';
                           }
                           return null;
                         },
@@ -123,8 +140,7 @@ class _AddDisposalPlacesState extends State<AddDisposalPlaces> {
                               _submitForm();
                             }
                           },
-                          style: mainButtton,
-                          child: const Text("Add", style: MainbuttonText),
+                          child: const Text("Add"),
                         ),
                       ),
                     ],
@@ -141,8 +157,7 @@ class _AddDisposalPlacesState extends State<AddDisposalPlaces> {
   void _submitForm() async {
     // Create payload from form data
     Map<String, dynamic> payload = {
-      'name': nameController.text,
-      'routeId': int.parse(routeIdController.text),
+      'routeId': routeNames.indexWhere((name) => name == selectedRouteId),
       'latitude': double.parse(latitudeController.text),
       'longitude': double.parse(longitudeController.text),
     };
@@ -189,8 +204,6 @@ class _AddDisposalPlacesState extends State<AddDisposalPlaces> {
   @override
   void dispose() {
     // Dispose controllers
-    nameController.dispose();
-    routeIdController.dispose();
     latitudeController.dispose();
     longitudeController.dispose();
     super.dispose();

@@ -1,4 +1,5 @@
 import 'package:ecotrack/Components/MyBottomNavigationBar.dart';
+import 'package:ecotrack/ipconfig.dart';
 import 'package:ecotrack/screen/Admin/adminHomePage.dart';
 import 'package:ecotrack/screen/TruckDriver/TruckDriverHomePage.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class _SignInPageState extends State<SignInPage> {
 
   Future<Map<String, dynamic>?> authenticateUser(
       String username, String password) async {
-    const apiUrl = 'http://192.168.43.180:8080/authenticate';
+     final apiUrl = '$localhost/authenticate';
 
     try {
       final response = await http.post(
