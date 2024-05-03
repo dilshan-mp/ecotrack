@@ -20,6 +20,7 @@ dependencies:
   flutter_polyline_points: ^2.0.0
   flutter_svg: ^2.0.10+1
   gallery_picker: ^0.4.8
+  geolocator: ^11.0.0
   google_fonts: ^6.2.0
   google_maps_flutter: ^2.5.3
   google_nav_bar: ^5.0.6
@@ -30,7 +31,7 @@ dependencies:
   like_button: ^2.0.5
   provider: ^6.1.2
   searchfield: ^1.0.0
-
+  google_maps_flutter_platform_interface: ^2.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -40,6 +41,7 @@ flutter:
   uses-material-design: true
   assets:
     - asset/images/startImage.jpg
+    - asset/user_locations.json
     - asset/images/appicon.png
     - asset/images/feed1.jpg
     - asset/images/1a8a6ac05e82a7d9b5ddcd225c5e7384.jpg
