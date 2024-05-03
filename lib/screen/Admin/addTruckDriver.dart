@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:ecotrack/ipconfig.dart';
+import 'package:ecotrack/screen/Admin/TruckDrivers.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -10,7 +12,6 @@ class TruckDriver {
   final int age;
   final String password;
   final String email;
-  final String role;
 
   TruckDriver({
     required this.name,
@@ -20,57 +21,7 @@ class TruckDriver {
     required this.age,
     required this.password,
     required this.email,
-    required this.role,
   });
-
-Future<String?> authenticateUser(String username, String password) async {
-  const apiUrl = 'http://localhost:8080/authenticate';
-
-  try {
-    final response = await http.post(
-      Uri.parse(apiUrl),
-      headers: {
-        'Content-Type': 'application/json',
-        'VERSION': 'V1', // Add any custom headers if required
-      },
-      body: json.encode({
-        'username': username,
-        'password': password,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      final responseData = json.decode(response.body);
-      final token = responseData['token'] as String?;
-      return token;
-    } else {
-      // Handle authentication error
-      print('Authentication failed with status: ${response.statusCode}');
-      return null;
-    }
-  } catch (error) {
-    // Handle network or other errors
-    print('Error: $error');
-    return null;
-  }
-}
-
-// // Example usage:
-// void loginUser() async {
-//   final username = 'example@example.com'; // Replace with user's username
-//   final password = 'password123'; // Replace with user's password
-
-//   final token = await authenticateUser(username, password);
-//   if (token != null) {
-//     // Authentication successful, store the token and proceed with app logic
-//     print('JWT token: $token');
-//     // Store the token locally (e.g., using shared_preferences)
-//   } else {
-//     // Authentication failed, handle accordingly
-//     print('Authentication failed');
-//   }
-// }
-
 
   Map<String, dynamic> toJson() {
     return {
@@ -81,85 +32,128 @@ Future<String?> authenticateUser(String username, String password) async {
       'age': age,
       'password': password,
       'email': email,
-      'role': role,
     };
   }
 }
+
 class AddTruckDriverScreen extends StatefulWidget {
+  final String? token;
+  final Map<String, dynamic>? userDetails;
+
+  const AddTruckDriverScreen({Key? key, required this.token, required this.userDetails, required TruckDriver truckDriver}) : super(key: key);
+
   @override
-  _AddTruckDriverScreenState createState() => _AddTruckDriverScreenState();
+  State<AddTruckDriverScreen> createState() => _AddTruckDriverScreenState();
 }
 
 class _AddTruckDriverScreenState extends State<AddTruckDriverScreen> {
   final _formKey = GlobalKey<FormState>();
-  late TextEditingController _nameController;
-  late TextEditingController _licenceNumberController;
-  late TextEditingController _phoneController;
-  late TextEditingController _nicController;
-  late TextEditingController _ageController;
-  late TextEditingController _passwordController;
-  late TextEditingController _emailController;
-  late TextEditingController _roleController;
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _licenceNumberController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
+  TextEditingController _nicController = TextEditingController();
+  TextEditingController _ageController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    _nameController = TextEditingController();
-    _licenceNumberController = TextEditingController();
-    _phoneController = TextEditingController();
-    _nicController = TextEditingController();
-    _ageController = TextEditingController();
-    _passwordController = TextEditingController();
-    _emailController = TextEditingController();
-    _roleController = TextEditingController();
-  }
+  Future<void> _addTruckDriver(BuildContext context) async {
+  final truckDriverData = TruckDriver(
+    name: _nameController.text,
+    licenceNumber: _licenceNumberController.text,
+    phone: _phoneController.text,
+    nic: _nicController.text,
+    age: int.parse(_ageController.text),
+    password: _passwordController.text,
+    email: _emailController.text,
+  );
 
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _licenceNumberController.dispose();
-    _phoneController.dispose();
-    _nicController.dispose();
-    _ageController.dispose();
-    _passwordController.dispose();
-    _emailController.dispose();
-    _roleController.dispose();
-    super.dispose();
-  }
+  final jsonBody = truckDriverData.toJson();
 
-  Future<void> addTruckDriver(TruckDriver truckDriver) async {
-    const String apiUrl = 'http://localhost:8080/truckdriver'; // Change this to your actual backend URL
-    final Map<String, String> headers = {
-      'Content-Type': 'application/json',
-    };
+  try {
+    final response = await http.post(
+      Uri.parse('$localhost/truckdriver'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${widget.token}',
+        'VERSION': 'V1',
+      },
+      body: json.encode(jsonBody),
+    );
 
-    try {
-      final http.Response response = await http.post(
-        Uri.parse(apiUrl),
-        headers: headers,
-        body: json.encode(truckDriver.toJson()),
+    print('Response status code: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      // Show success alert
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Success'),
+            content: const Text('Truck driver added successfully!'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
       );
-
-      if (response.statusCode == 201) {
-        // Truck driver added successfully
-        print('Truck driver added successfully');
-      } else {
-        // Error adding truck driver
-        print('Error adding truck driver: ${response.body}');
-      }
-    } catch (error) {
-      print('Error: $error');
+    } else {
+      // Show error alert
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: const Text('Failed to add truck driver!'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     }
+  } catch (e) {
+    // Handle exceptions
+    print('Error occurred: $e');
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: const Text('An unexpected error occurred!'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Truck Driver'),
+        title: const Text('Add Truck Driver'),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
@@ -167,7 +161,7 @@ class _AddTruckDriverScreenState extends State<AddTruckDriverScreen> {
             children: <Widget>[
               TextFormField(
                 controller: _nameController,
-                decoration: InputDecoration(labelText: 'Name'),
+                decoration: const InputDecoration(labelText: 'Name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your name';
@@ -236,31 +230,11 @@ class _AddTruckDriverScreenState extends State<AddTruckDriverScreen> {
                   return null;
                 },
               ),
-              TextFormField(
-                controller: _roleController,
-                decoration: InputDecoration(labelText: 'Role'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your role';
-                  }
-                  return null;
-                },
-              ),
               SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    final truckDriver = TruckDriver(
-                      name: _nameController.text,
-                      licenceNumber: _licenceNumberController.text,
-                      phone: _phoneController.text,
-                      nic: _nicController.text,
-                      age: int.parse(_ageController.text),
-                      password: _passwordController.text,
-                      email: _emailController.text,
-                      role: _roleController.text,
-                    );
-                    addTruckDriver(truckDriver);
+                    _addTruckDriver(context); // Send data to backend
                   }
                 },
                 child: Text('Add Truck Driver'),
