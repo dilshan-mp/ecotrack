@@ -1,8 +1,11 @@
 import 'package:ecotrack/Components/MyBottomNavigationBar.dart';
-import 'package:ecotrack/screen/User/homePage.dart';
+import 'package:ecotrack/ipconfig.dart';
+import 'package:ecotrack/screen/Admin/adminHomePage.dart';
+import 'package:ecotrack/screen/TruckDriver/TruckDriverHomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+ // Import MyBottomNavigationBar
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -19,7 +22,7 @@ class _SignInPageState extends State<SignInPage> {
 
   Future<Map<String, dynamic>?> authenticateUser(
       String username, String password) async {
-    const apiUrl = 'http://192.168.43.20:8080/authenticate';
+     final apiUrl = '$localhost/authenticate';
 
     try {
       final response = await http.post(
@@ -43,7 +46,6 @@ class _SignInPageState extends State<SignInPage> {
       } else {
         // Handle authentication error
         print('Authentication failed with status: ${response.statusCode}');
-        print('weda meka');
         return null;
       }
     } catch (error) {
@@ -155,12 +157,28 @@ class _SignInPageState extends State<SignInPage> {
       if (authResult != null) {
         final token = authResult['token'];
         final userDetails = authResult['userDetails'];
+        final String? userRole = userDetails?['role'];
 
-        // Authentication successful, proceed to the home page with user details
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => MyBottomNavigationBar(token: token, userDetails: userDetails)),
-        );
+        // Navigation based on user's role
+        if (userRole == 'ADMIN') {
+          // Navigate to Admin home page
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => AdminHomePage(token: token, userDetails: userDetails)),
+          );
+        } else if (userRole == 'truckdriver') {
+          // Navigate to TruckDriverHomePage
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => TruckDriverHomePage()),
+          );
+        } else {
+          // Navigate to MyBottomNavigationBar for other roles
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => MyBottomNavigationBar(token: token, userDetails: userDetails)),
+          );
+        }
       } else {
         // Authentication failed, show error message or handle accordingly
         ScaffoldMessenger.of(context).showSnackBar(
