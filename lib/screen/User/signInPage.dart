@@ -166,11 +166,11 @@ class _SignInPageState extends State<SignInPage> {
             context,
             MaterialPageRoute(builder: (context) => AdminHomePage(token: token, userDetails: userDetails)),
           );
-        } else if (userRole == 'truckdriver') {
+        } else if (_email == 'isu@gmail.com') {
           // Navigate to TruckDriverHomePage
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => TruckDriverHomePage()),
+            MaterialPageRoute(builder: (context) => TruckDriverHomePage(token: token, userDetails: userDetails)),
           );
         } else {
           // Navigate to MyBottomNavigationBar for other roles

@@ -1,30 +1,33 @@
+import 'dart:convert';
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ecotrack/style/button.dart';
-import 'package:ecotrack/style/colors.dart';
+import 'package:ecotrack/ipconfig.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class SellItems extends StatefulWidget {
-  const SellItems({super.key});
+   final String? token;
+  final Map<String, dynamic>? userDetails;
+  const SellItems({Key? key, required this.token, required this.userDetails}) : super(key: key);
 
   @override
   State<SellItems> createState() => _SellItemsState();
 }
 
 class _SellItemsState extends State<SellItems> {
+  late TextEditingController _nameController;
+  late TextEditingController _quantityController;
+  late TextEditingController _priceController;
   late TextEditingController _descriptionController;
-  late TextEditingController _priceController; // Add this line for price
-  late DateTime _selectedDate;
   late File? _imageFile;
 
   @override
   void initState() {
     super.initState();
+    _nameController = TextEditingController();
+    _quantityController = TextEditingController();
+    _priceController = TextEditingController();
     _descriptionController = TextEditingController();
-    _priceController = TextEditingController(); // Initialize the price controller
-    _selectedDate = DateTime.now();
     _imageFile = null;
   }
 
@@ -39,9 +42,7 @@ class _SellItemsState extends State<SellItems> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _imageFile != null
-                ? Image.file(_imageFile!)
-                : const Icon(Icons.image), // Placeholder for image display
+            _imageFile != null ? Image.file(_imageFile!) : const Icon(Icons.image),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
@@ -51,14 +52,26 @@ class _SellItemsState extends State<SellItems> {
             ),
             const SizedBox(height: 20),
             const Text(
-              'Description',
+              'Name',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             TextFormField(
-              controller: _descriptionController,
-              maxLines: 3,
+              controller: _nameController,
               decoration: const InputDecoration(
-                hintText: 'Enter description',
+                hintText: 'Enter name',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Quantity',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            TextFormField(
+              controller: _quantityController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                hintText: 'Enter quantity',
                 border: OutlineInputBorder(),
               ),
             ),
@@ -68,8 +81,8 @@ class _SellItemsState extends State<SellItems> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             TextFormField(
-              controller: _priceController, // Connect the controller
-              keyboardType: TextInputType.numberWithOptions(decimal: true), // Set keyboard type to number with decimal
+              controller: _priceController,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
               decoration: const InputDecoration(
                 hintText: '0.00',
                 border: OutlineInputBorder(),
@@ -77,43 +90,23 @@ class _SellItemsState extends State<SellItems> {
             ),
             const SizedBox(height: 20),
             const Text(
-              'Date',
+              'Description',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            InkWell(
-              onTap: () => _selectDate(context),
-              child: InputDecorator(
-                decoration: const InputDecoration(
-                  hintText: 'Select date',
-                  border: OutlineInputBorder(),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '${_selectedDate.toLocal()}'.split(' ')[0],
-                    ),
-                    const Icon(Icons.calendar_today),
-                  ],
-                ),
+            TextFormField(
+              controller: _descriptionController,
+              maxLines: null,
+              decoration: const InputDecoration(
+                hintText: 'Enter description',
+                border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 20),
             Center(
               child: ElevatedButton(
-                  onPressed: () {
-                    Map<String, dynamic> addpost = {
-                      'Image': "",
-                      'Description': _descriptionController.text, // Use entered description
-                      'Price': double.parse(_priceController.text), // Convert entered price to double
-                      'Date': _selectedDate,
-                    };
-                    CollectionReference collectionReference =
-                        FirebaseFirestore.instance.collection('Admin_Post');
-                    collectionReference.add(addpost);
-                  },
-                  style: mainButtton,
-                  child: const Text('Submit')),
+                onPressed: _imageFile != null ? _submitData : null,
+                child: const Text('Submit'),
+              ),
             ),
           ],
         ),
@@ -121,24 +114,9 @@ class _SellItemsState extends State<SellItems> {
     );
   }
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: _selectedDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (picked != null && picked != _selectedDate) {
-      setState(() {
-        _selectedDate = picked;
-      });
-    }
-  }
-
   Future<void> _pickImage() async {
     final ImagePicker _picker = ImagePicker();
-    final XFile? pickedFile =
-        await _picker.pickImage(source: ImageSource.gallery);
+    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
         _imageFile = File(pickedFile.path);
@@ -146,10 +124,80 @@ class _SellItemsState extends State<SellItems> {
     }
   }
 
+  Future<void> _submitData() async {
+    if (_nameController.text.isEmpty ||
+        _quantityController.text.isEmpty ||
+        _priceController.text.isEmpty ||
+        _descriptionController.text.isEmpty) {
+      return;
+    }
+
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('$localhost/users/store_items'),
+    );
+
+    var imageFile = await http.MultipartFile.fromPath(
+      'imagePath',
+      _imageFile!.path,
+    );
+    request.files.add(imageFile);
+
+    request.fields['name'] = _nameController.text;
+    request.fields['quantity'] = _quantityController.text;
+    request.fields['price'] = _priceController.text;
+    request.fields['description'] = _descriptionController.text;
+
+    request.headers['Authorization'] = 'Bearer ${widget.token}';
+    request.headers['VERSION'] = 'V1';
+
+    try {
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        setState(() {
+          _imageFile = null;
+          _priceController.clear();
+          _nameController.clear();
+          _quantityController.clear();
+          _descriptionController.clear();
+        });
+        _showSuccessDialog();
+      } else {
+        print('Error uploading data: ${response.reasonPhrase}');
+        final responseBody = await response.stream.bytesToString();
+        print('Response body: $responseBody');
+      }
+    } catch (e) {
+      print('Error submitting data: $e');
+    }
+  }
+
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Success'),
+          content: const Text('Post submitted successfully.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void dispose() {
+    _nameController.dispose();
+    _quantityController.dispose();
+    _priceController.dispose();
     _descriptionController.dispose();
-    _priceController.dispose(); // Dispose price controller
     super.dispose();
   }
 }

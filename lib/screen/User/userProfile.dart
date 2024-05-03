@@ -3,7 +3,10 @@ import 'package:ecotrack/screen/User/sellItems.dart';
 import 'package:flutter/material.dart';
 
 class UserProfile extends StatefulWidget {
-  const UserProfile({super.key});
+  final String? token;
+  final Map<String, dynamic>? userDetails;
+
+  const UserProfile({Key? key, required this.token, required this.userDetails}) : super(key: key);
 
   @override
   State<UserProfile> createState() => _UserProfileState();
@@ -46,7 +49,7 @@ class _UserProfileState extends State<UserProfile> {
             subtitle: const Text("Sell Your Iteams"),
             trailing: const Icon(Icons.menu,),
             onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>SellItems()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => SellItems(token: widget.token, userDetails: widget.userDetails)));
             },
           ),
            const Divider(),
