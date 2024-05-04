@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:ecotrack/ipconfig.dart';
+import 'package:ecotrack/screen/Admin/updatePost.dart';
 import 'package:ecotrack/screen/User/userProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:like_button/like_button.dart';
+
 
 class HomePage extends StatefulWidget {
   final String? token;
@@ -18,7 +20,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late Map<String, dynamic>? _userDetails;
   late List<Map<String, dynamic>> _notices = [];
-  bool _iconsVisible = false; // Added boolean variable
 
   @override
   void initState() {
@@ -59,9 +60,14 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void _toggleIconsVisibility() {
-    setState(() {
-      _iconsVisible = !_iconsVisible;
+  void _navigateToUpdatePage(int index) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => UpdatePost(token: widget.token, userDetails: widget.userDetails, noticeId: _notices[index]['id']),
+      ),
+    ).then((_) {
+      _fetchNotices(); // Refresh notices after returning from UpdatePost
     });
   }
 
@@ -74,24 +80,6 @@ class _HomePageState extends State<HomePage> {
           style: const TextStyle(color: Colors.black),
         ),
         actions: [
-          IconButton(
-            onPressed: _toggleIconsVisibility, // Toggle visibility when this icon is clicked
-            icon: Icon(Icons.settings), // Change this icon to your preferred update icon
-          ),
-          if (_iconsVisible) // Render delete and update icons if _iconsVisible is true
-            IconButton(
-              onPressed: () {
-                // Implement update action
-              },
-              icon: Icon(Icons.update),
-            ),
-          if (_iconsVisible) // Render delete and update icons if _iconsVisible is true
-            IconButton(
-              onPressed: () {
-                // Implement delete action
-              },
-              icon: Icon(Icons.delete),
-            ),
           IconButton(
             onPressed: () {
               Navigator.push(
@@ -115,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                   leading: const CircleAvatar(),
                   title: Text(notice['title'] ?? ''),
                   trailing: PopupMenuButton(
-                    icon: Icon(Icons.more_horiz_rounded),
+                    icon: const Icon(Icons.more_horiz_rounded),
                     itemBuilder: (context) => [
                       const PopupMenuItem(
                         value: 'delete',
@@ -127,10 +115,22 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                       ),
+                      const PopupMenuItem(
+                        value: 'update', // Added update option
+                        child: Row(
+                          children: [
+                            Icon(Icons.update),
+                            SizedBox(width: 8),
+                            Text('Update'),
+                          ],
+                        ),
+                      ),
                     ],
                     onSelected: (value) {
                       if (value == 'delete') {
                         _deleteNotice(index);
+                      } else if (value == 'update') {
+                        _navigateToUpdatePage(index); // Navigate to UpdatePost
                       }
                     },
                   ),
