@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:ecotrack/ipconfig.dart';
-import 'package:ecotrack/screen/User/PdfViewerPage.dart';
+import 'package:ecotrack/screen/User/ReportViewer.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -66,7 +66,7 @@ class ReportGeneration extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PdfViewerPage(reportUrl: reportUrl),
+            builder: (context) => ReportViewer(reportUrl: reportUrl),
           ),
         );
 
