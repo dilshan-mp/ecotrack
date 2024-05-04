@@ -4,6 +4,7 @@ import 'package:ecotrack/screen/Admin/addDisposalPlaces.dart';
 import 'package:ecotrack/screen/Admin/addRout.dart';
 import 'package:ecotrack/screen/Admin/adminpost.dart';
 import 'package:ecotrack/screen/User/firstPage.dart';
+import 'package:ecotrack/screen/User/homePage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -44,6 +45,15 @@ class AdminHomePage extends StatelessWidget {
                 () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => AdminPost(token: token, userDetails: userDetails)));
+                },
+              ),
+              const SizedBox(height: 20),
+              buildButton(
+                context,
+                'view post',
+                'asset/Icons/SVG/truck-delivery-svgrepo-com.svg', // Add your icon path
+                () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(token: token, userDetails: userDetails)));
                 },
               ),
               const SizedBox(height: 20),
