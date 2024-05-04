@@ -5,6 +5,8 @@ import 'package:ecotrack/screen/Admin/addRout.dart';
 import 'package:ecotrack/screen/Admin/adminpost.dart';
 import 'package:ecotrack/screen/User/firstPage.dart';
 import 'package:ecotrack/screen/User/homePage.dart';
+import 'package:ecotrack/screen/User/ReportGenaration.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -41,10 +43,9 @@ class AdminHomePage extends StatelessWidget {
               buildButton(
                 context,
                 'Add Post',
-                'asset/Icons/SVG/post-it-svgrepo-com.svg', // Add your icon path
+                'asset/Icons/SVG/post-it-svgrepo-com.svg',
                 () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => AdminPost(token: token, userDetails: userDetails)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AdminPost(token: token, userDetails: userDetails)));
                 },
               ),
               const SizedBox(height: 20),
@@ -60,19 +61,16 @@ class AdminHomePage extends StatelessWidget {
               buildButton(
                 context,
                 'Add Disposal Point',
-                'asset/Icons/SVG/garbage-trash-svgrepo-com.svg', // Add your icon path
+                'asset/Icons/SVG/garbage-trash-svgrepo-com.svg',
                 () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => AddDisposalPlaces(token: token, userDetails: userDetails)),
-                  );
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AddDisposalPlaces(token: token, userDetails: userDetails)));
                 },
               ),
               const SizedBox(height: 20),
               buildButton(
                 context,
                 'Route',
-                'asset/Icons/SVG/route-svgrepo-com.svg', // Add your icon path
+                'asset/Icons/SVG/route-svgrepo-com.svg',
                 () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => Routes(token: token, userDetails: userDetails)));
                 },
@@ -81,7 +79,7 @@ class AdminHomePage extends StatelessWidget {
               buildButton(
                 context,
                 'Truck Drivers',
-                'asset/Icons/SVG/truck-delivery-svgrepo-com.svg', // Add your icon path
+                'asset/Icons/SVG/truck-delivery-svgrepo-com.svg',
                 () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => TruckDrivers(token: token, userDetails: userDetails)));
                 },
@@ -90,7 +88,7 @@ class AdminHomePage extends StatelessWidget {
               buildButton(
                 context,
                 'View Complain',
-                'asset/Icons/SVG/complain-ecommerce-market-svgrepo-com.svg', // Add your icon path
+                'asset/Icons/SVG/complain-ecommerce-market-svgrepo-com.svg',
                 () {
                   // Add your functionality here
                 },
@@ -99,9 +97,18 @@ class AdminHomePage extends StatelessWidget {
               buildButton(
                 context,
                 'Edit Profile Request',
-                'asset/Icons/SVG/edit-user-svgrepo-com.svg', // Add your icon path
+                'asset/Icons/SVG/edit-user-svgrepo-com.svg',
                 () {
                   // Add your functionality here
+                },
+              ),
+              const SizedBox(height: 20),
+              buildButton(
+                context,
+                'Generate Report',
+                'asset/Icons/SVG/report-svgrepo-com.svg', // Add your icon path
+                () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ReportGeneration(token: token, userDetails: userDetails)));
                 },
               ),
             ],
@@ -128,9 +135,9 @@ class AdminHomePage extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            backgroundColor: Colors.white, // Change background color to white
-            elevation: 5, // Add elevation for shadow
-            shadowColor: Colors.grey, // Set shadow color
+            backgroundColor: Colors.white,
+            elevation: 5,
+            shadowColor: Colors.grey,
           ),
           child: Row(
             children: [
@@ -138,14 +145,14 @@ class AdminHomePage extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 20),
                 child: SvgPicture.asset(
                   iconPath,
-                  width: 50, // Adjust icon size as needed
-                  height: 50, // Adjust icon size as needed
+                  width: 50,
+                  height: 50,
                 ),
               ),
-              const SizedBox(width: 20), // Adjust space between icon and text
+              const SizedBox(width: 20),
               Text(
                 text,
-                style: const TextStyle(color: Colors.black, fontSize: 20), // Adjust font size and color
+                style: const TextStyle(color: Colors.black, fontSize: 20),
               )
             ],
           ),
