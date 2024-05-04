@@ -25,7 +25,7 @@ class _MyBottomNavigationBar extends State<MyBottomNavigationBar> {
     super.initState();
     _pages = [
       HomePage(token: widget.token, userDetails: widget.userDetails),
-      DisposalRequest(),
+      DisposalRequest(token: widget.token, userDetails: widget.userDetails),
       StorePage(),
     ];
   }
