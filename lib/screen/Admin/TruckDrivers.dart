@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:ecotrack/ipconfig.dart';
+import 'package:ecotrack/screen/Admin/TruckDriversAdd.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -39,9 +40,10 @@ class TruckDriver {
 }
 
 class TruckDrivers extends StatefulWidget {
-  final String? token;
+   final String? token;
   final Map<String, dynamic>? userDetails;
   const TruckDrivers({Key? key, required this.token, required this.userDetails}) : super(key: key);
+
 
   @override
   State<TruckDrivers> createState() => _TruckDriversState();
@@ -84,6 +86,29 @@ class _TruckDriversState extends State<TruckDrivers> {
     }
   }
 
+  Future<void> _deleteTruckDriver(int driverId) async {
+    final apiUrl = '$localhost/truckdriver/$driverId';
+
+    try {
+      final response = await http.delete(
+        Uri.parse(apiUrl),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${widget.token}',
+          'VERSION': 'V1',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        fetchTruckDrivers(); // Refresh the list of truck drivers after deletion
+      } else {
+        print('Failed to delete truck driver with status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error: $error');
+    }
+  }
+
   void _editTruckDriver(TruckDriver driver) {
     Navigator.push(
       context,
@@ -102,10 +127,18 @@ class _TruckDriversState extends State<TruckDrivers> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Truck Drivers'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 30),
+            child: IconButton(onPressed: (){
+               Navigator.push(context, MaterialPageRoute(builder: (context)=>TruckDRiversAdd(token: widget.token,userDetails:widget.userDetails ,)));
+            }, icon: const Icon(Icons.add_box_rounded,size: 40,)),
+          )
+        ],
       ),
       body: Center(
         child: truckDrivers.isEmpty
-            ? CircularProgressIndicator() // Show loading indicator if data is being fetched
+            ? CircularProgressIndicator()
             : ListView.builder(
                 itemCount: truckDrivers.length,
                 itemBuilder: (context, index) {
@@ -126,7 +159,7 @@ class _TruckDriversState extends State<TruckDrivers> {
                           IconButton(
                             icon: Icon(Icons.delete, color: Colors.red),
                             onPressed: () {
-                              // Implement delete functionality
+                              _deleteTruckDriver(driver.id); // Delete the truck driver
                             },
                           ),
                         ],
@@ -268,6 +301,18 @@ class _AddTruckDriverScreenState extends State<AddTruckDriverScreen> {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TruckDRiversAdd(token: widget.token, userDetails: widget.userDetails),
+      ),
+    );
+  },
+  child: Icon(Icons.add),
+),
+
     );
   }
 }
