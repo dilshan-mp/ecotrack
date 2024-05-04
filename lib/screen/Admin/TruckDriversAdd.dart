@@ -11,6 +11,7 @@ class TruckDriver {
   final int age;
   final String password;
   final String email;
+  final String role;
 
   TruckDriver({
     required this.name,
@@ -20,6 +21,7 @@ class TruckDriver {
     required this.age,
     required this.password,
     required this.email,
+    required this.role,
   });
 
   Map<String, dynamic> toJson() {
@@ -31,6 +33,7 @@ class TruckDriver {
       'age': age,
       'password': password,
       'email': email,
+      'role': role
     };
   }
 }
@@ -64,6 +67,7 @@ class _TruckDRiversAddState extends State<TruckDRiversAdd> {
       age: int.parse(_ageController.text),
       password: _passwordController.text,
       email: _emailController.text,
+      role:'DRIVER',
     );
 
     final jsonBody = truckDriverData.toJson();

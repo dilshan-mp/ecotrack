@@ -1,9 +1,9 @@
-import 'package:ecotrack/screen/TruckDriver/Route1.dart';
 import 'package:flutter/material.dart';
-
+import 'package:ecotrack/screen/TruckDriver/Route1.dart';
+import 'package:ecotrack/screen/TruckDriver/Route2.dart'; // Import Route2 page
 
 class CheckRequest extends StatefulWidget {
-  const CheckRequest({Key? key});
+  const CheckRequest({Key? key}) : super(key: key);
 
   @override
   State<CheckRequest> createState() => _CheckRequestState();
@@ -76,10 +76,10 @@ class _CheckRequestState extends State<CheckRequest> {
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: ElevatedButton(
                 onPressed: () {
-                  // Navigate to Route1Page when Route B is clicked
+                  // Navigate to Route1Page when Route A is clicked
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Route1()),
+                    MaterialPageRoute(builder: (context) => Route2()),
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -100,7 +100,7 @@ class _CheckRequestState extends State<CheckRequest> {
                     Padding(
                       padding: EdgeInsets.only(right: 30),
                       child: Text(
-                        "50%",
+                        "75%",
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                       ),
                     )
@@ -116,10 +116,10 @@ class _CheckRequestState extends State<CheckRequest> {
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: ElevatedButton(
                 onPressed: () {
-                  // Navigate to Route1Page when Route C is clicked
+                  // Navigate to Route3Page when Route C is clicked
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Route1()),
+                    MaterialPageRoute(builder: (context) => Route2()),
                   );
                 },
                 style: ElevatedButton.styleFrom(
