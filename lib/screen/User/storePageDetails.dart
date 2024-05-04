@@ -1,33 +1,89 @@
 import 'package:flutter/material.dart';
 
-class StorePageDetails extends StatefulWidget {
-  const StorePageDetails({super.key});
+class StorePageDetails extends StatelessWidget {
+  final String name;
+  final double price;
+  final int quantity;
+  final String description;
+  final String imagePath;
 
-  @override
-  State<StorePageDetails> createState() => _StorePageDetailsState();
-}
+  const StorePageDetails({
+    Key? key,
+    required this.name,
+    required this.price,
+    required this.quantity,
+    required this.description,
+    required this.imagePath,
+  }) : super(key: key);
 
-class _StorePageDetailsState extends State<StorePageDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Column(
-        children: [
-         SizedBox(
-            height: 450, // Adjust the height as needed
-            width: 400, // Adjust the width as needed
-            child: Image.asset(
-               "asset/images/1a8a6ac05e82a7d9b5ddcd225c5e7384.jpg",
-            fit: BoxFit.cover, // Adjust the fit as needed
+      appBar: AppBar(
+        title: Text(name),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.network(
+              imagePath,
+              width: double.infinity,
+              height: 200,
+              fit: BoxFit.cover,
+            ),
+            SizedBox(height: 16),
+            Text(
+              'Name: $name',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'Price: $price',
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.green,
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'Quantity: $quantity',
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.blue,
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'Description: $description',
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.black87,
+              ),
+            ),
+            SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  // Add your buy now functionality here
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green, // Background color
+                ),
+                child: const Text(
+                  "Buy Now",
+                  style: TextStyle(color: Colors.white,fontSize: 20), // Text color
+                ),
+              ),
+            )
+          ],
         ),
-       ),
-       
-          // SizedBox(
-          //   height: 500,
-          //   width: 500,
-          //   child: Image.asset("asset/images/1a8a6ac05e82a7d9b5ddcd225c5e7384.jpg",))
-        ],
       ),
     );
   }

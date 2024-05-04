@@ -1,9 +1,10 @@
 import 'package:ecotrack/screen/Admin/Routes.dart';
-import 'package:ecotrack/screen/Admin/TruckDrivers.dart';
+import 'package:ecotrack/screen/Admin/TruckDrivers.dart'; // Import TruckDrivers.dart instead of TruckDRiversAdd.dart
 import 'package:ecotrack/screen/Admin/addDisposalPlaces.dart';
 import 'package:ecotrack/screen/Admin/addRout.dart';
-import 'package:ecotrack/screen/Admin/addTruckDriver.dart';
 import 'package:ecotrack/screen/Admin/adminpost.dart';
+import 'package:ecotrack/screen/User/firstPage.dart';
+import 'package:ecotrack/screen/User/homePage.dart';
 import 'package:ecotrack/screen/User/ReportGenaration.dart';
 
 import 'package:flutter/material.dart';
@@ -26,6 +27,14 @@ class AdminHomePage extends StatelessWidget {
             ),
           ],
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(left: 50),
+            child: IconButton(onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>FirstPage()));
+            }, icon: const Icon(Icons.logout)),
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -37,6 +46,15 @@ class AdminHomePage extends StatelessWidget {
                 'asset/Icons/SVG/post-it-svgrepo-com.svg',
                 () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => AdminPost(token: token, userDetails: userDetails)));
+                },
+              ),
+              const SizedBox(height: 20),
+              buildButton(
+                context,
+                'view post',
+                'asset/Icons/SVG/truck-delivery-svgrepo-com.svg', // Add your icon path
+                () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(token: token, userDetails: userDetails)));
                 },
               ),
               const SizedBox(height: 20),

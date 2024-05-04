@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:ecotrack/ipconfig.dart';
-import 'package:ecotrack/screen/Admin/TruckDrivers.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -36,17 +35,17 @@ class TruckDriver {
   }
 }
 
-class AddTruckDriverScreen extends StatefulWidget {
-  final String? token;
+class TruckDRiversAdd extends StatefulWidget {
+   final String? token;
   final Map<String, dynamic>? userDetails;
+  const TruckDRiversAdd({Key? key, required this.token, required this.userDetails}) : super(key: key);
 
-  const AddTruckDriverScreen({Key? key, required this.token, required this.userDetails, required TruckDriver truckDriver}) : super(key: key);
 
   @override
-  State<AddTruckDriverScreen> createState() => _AddTruckDriverScreenState();
+  State<TruckDRiversAdd> createState() => _TruckDRiversAddState();
 }
 
-class _AddTruckDriverScreenState extends State<AddTruckDriverScreen> {
+class _TruckDRiversAddState extends State<TruckDRiversAdd> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController _nameController = TextEditingController();
   TextEditingController _licenceNumberController = TextEditingController();
@@ -57,59 +56,76 @@ class _AddTruckDriverScreenState extends State<AddTruckDriverScreen> {
   TextEditingController _emailController = TextEditingController();
 
   Future<void> _addTruckDriver(BuildContext context) async {
-  final truckDriverData = TruckDriver(
-    name: _nameController.text,
-    licenceNumber: _licenceNumberController.text,
-    phone: _phoneController.text,
-    nic: _nicController.text,
-    age: int.parse(_ageController.text),
-    password: _passwordController.text,
-    email: _emailController.text,
-  );
-
-  final jsonBody = truckDriverData.toJson();
-
-  try {
-    final response = await http.post(
-      Uri.parse('$localhost/truckdriver'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${widget.token}',
-        'VERSION': 'V1',
-      },
-      body: json.encode(jsonBody),
+    final truckDriverData = TruckDriver(
+      name: _nameController.text,
+      licenceNumber: _licenceNumberController.text,
+      phone: _phoneController.text,
+      nic: _nicController.text,
+      age: int.parse(_ageController.text),
+      password: _passwordController.text,
+      email: _emailController.text,
     );
 
-    print('Response status code: ${response.statusCode}');
-    print('Response body: ${response.body}');
+    final jsonBody = truckDriverData.toJson();
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      // Show success alert
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Success'),
-            content: const Text('Truck driver added successfully!'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          );
+    try {
+      final response = await http.post(
+        Uri.parse('$localhost/truckdriver'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${widget.token}',
+          'VERSION': 'V1',
         },
+        body: json.encode(jsonBody),
       );
-    } else {
-      // Show error alert
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // Show success alert
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Success'),
+              content: const Text('Truck driver added successfully!'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        // Show error alert
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Error'),
+              content: const Text('Failed to add truck driver!'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    } catch (e) {
+      // Handle exceptions
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text('Error'),
-            content: const Text('Failed to add truck driver!'),
+            content: const Text('An unexpected error occurred!'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
@@ -122,31 +138,8 @@ class _AddTruckDriverScreenState extends State<AddTruckDriverScreen> {
         },
       );
     }
-  } catch (e) {
-    // Handle exceptions
-    print('Error occurred: $e');
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Error'),
-          content: const Text('An unexpected error occurred!'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
   }
-}
-
-
-  @override
+ @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
