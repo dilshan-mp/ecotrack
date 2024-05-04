@@ -1,6 +1,8 @@
+import 'dart:convert';
+import 'package:ecotrack/ipconfig.dart';
 import 'package:ecotrack/screen/User/storePageDetails.dart';
 import 'package:flutter/material.dart';
-import 'package:ecotrack/screen/User/sellItems.dart';
+import 'package:http/http.dart' as http;
 
 class StorePage extends StatefulWidget {
   final String? token;
@@ -13,9 +15,29 @@ class StorePage extends StatefulWidget {
 }
 
 class _StorePageState extends State<StorePage> {
-  String _selectedButton = ''; // Track the selected button
-  List<String> category = ['Clay', 'Glass', 'Iron', 'wood'];
-  int selectedIndex = 0;
+  late List<Map<String, dynamic>> _storeData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchStoreData();
+  }
+
+  Future<void> _fetchStoreData() async {
+    final response = await http.get(
+      Uri.parse('$localhost/users/store_items'),
+      headers: {'Authorization': 'Bearer ${widget.token}'},
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      setState(() {
+        _storeData = List<Map<String, dynamic>>.from(data);
+      });
+    } else {
+      print('Failed to fetch store items with status: ${response.statusCode}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,229 +51,86 @@ class _StorePageState extends State<StorePage> {
         ),
         leading: null,
       ),
-      body: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.only(left: 8, right: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 4, right: 4),
-                    child: CustomButton(
-                      text: 'Clay',
-                      isSelected: _selectedButton == 'Clay',
-                      onTap: () {
-                        setState(() {
-                          _selectedButton = 'Clay';
-                        });
-                      },
+      body: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 20,
+          childAspectRatio: 2 / 3, // Adjust the ratio as needed
+        ),
+        itemCount: _storeData.length,
+        itemBuilder: (context, index) {
+          final item = _storeData[index];
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => StorePageDetails(
+                      name: item['name'] ?? '',
+                      price: item['price'] ?? 0.0,
+                      description: item['description'] ?? '',
+                      imagePath: item['imagePath'] ?? '', 
+                      quantity: item['quantity']?? 0,
                     ),
                   ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 4, right: 4),
-                    child: CustomButton(
-                      text: 'Glass',
-                      isSelected: _selectedButton == 'Glass',
-                      onTap: () {
-                        setState(() {
-                          _selectedButton = 'Glass';
-                        });
-                      },
+                );
+              },
+              child: Container(
+                decoration: const BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color.fromARGB(255, 237, 231, 231),
+                      spreadRadius: 1,
+                      blurRadius: 5,
                     ),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 4, right: 4),
-                    child: CustomButton(
-                      text: 'Iron',
-                      isSelected: _selectedButton == 'Iron',
-                      onTap: () {
-                        setState(() {
-                          _selectedButton = 'Iron';
-                        });
-                      },
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 4, right: 4),
-                    child: CustomButton(
-                      text: 'Wood',
-                      isSelected: _selectedButton == 'Wood',
-                      onTap: () {
-                        setState(() {
-                          _selectedButton = 'Wood';
-                        });
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 30, top: 30),
-                      child: Container(
-                        width: 150,
-                        height: 320,
-                        decoration: const BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                                color: Color.fromARGB(255, 237, 231, 231),
-                                spreadRadius: 1,
-                                blurRadius: 5),
-                          ],
-                        ),
-                        child: Column(
-                          children: [
-                            Image.asset(
-                                'asset/images/1a8a6ac05e82a7d9b5ddcd225c5e7384.jpg'),
-                            const SizedBox(
-                              height: 4,
-                            ),
-                            const Text("Glass Light",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.green,
-                                    fontSize: 25)),
-                            const SizedBox(
-                                child: Text(
-                              "Rs.800.00",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 15),
-                            )),
-                            SizedBox(
-                              width: 120,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const StorePageDetails()));
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        const Color.fromARGB(
-                                            255, 96, 169, 128)),
-                                child: const Text("Details",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 20)),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 30, top: 30),
-                      child: Container(
-                        width: 150,
-                        height: 320,
-                        decoration: const BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                                color: Color.fromARGB(255, 237, 231, 231),
-                                spreadRadius: 1,
-                                blurRadius: 5),
-                          ],
-                        ),
-                        child: Column(
-                          children: [
-                            Image.asset(
-                                'asset/images/1a8a6ac05e82a7d9b5ddcd225c5e7384.jpg'),
-                            const SizedBox(
-                              height: 4,
-                            ),
-                            const Text("Glass Light",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.green,
-                                    fontSize: 25)),
-                            const SizedBox(
-                                child: Text(
-                              "Rs.800.00",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 15),
-                            )),
-                            SizedBox(
-                              width: 120,
-                              child: ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Color.fromARGB(255, 96, 169, 128)),
-                                child: const Text("Details",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 20)),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
                   ],
-                )
-              ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 150,
+                      width: double.infinity,
+                      child: Image.network(
+                        item['imagePath'] ?? '',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 5),
+                            child: Text(
+                              item['name'] ?? '',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            'Rs. ${item['price'] ?? ''}',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          )
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => SellItems(
-                      token: widget.token,
-                      userDetails: widget.userDetails)));
+          );
         },
-        backgroundColor: Colors.green,
-        child: Icon(Icons.add),
-      ),
-    );
-  }
-}
-
-class CustomButton extends StatelessWidget {
-  final String text;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const CustomButton(
-      {super.key, required this.text, required this.isSelected, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.green : Colors.grey.shade300,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Center(
-          child: Text(
-            text,
-            style: TextStyle(
-              color: isSelected ? Colors.white : Colors.black,
-            ),
-          ),
-        ),
       ),
     );
   }

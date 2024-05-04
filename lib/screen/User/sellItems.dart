@@ -1,17 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:ecotrack/ipconfig.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 
 class SellItems extends StatefulWidget {
-   final String? token;
+  final String? token;
   final Map<String, dynamic>? userDetails;
+
   const SellItems({Key? key, required this.token, required this.userDetails}) : super(key: key);
 
   @override
-  State<SellItems> createState() => _SellItemsState();
+  _SellItemsState createState() => _SellItemsState();
 }
 
 class _SellItemsState extends State<SellItems> {
@@ -134,14 +136,16 @@ class _SellItemsState extends State<SellItems> {
 
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('$localhost/users/store_items'),
+      Uri.parse('$localhost/users/store_items'), // Replace with your actual backend URL
     );
 
-    var imageFile = await http.MultipartFile.fromPath(
-      'imagePath',
-      _imageFile!.path,
-    );
-    request.files.add(imageFile);
+    if (_imageFile != null) {
+      var imageFile = await http.MultipartFile.fromPath(
+        'imagePath',
+        _imageFile!.path,
+      );
+      request.files.add(imageFile);
+    }
 
     request.fields['name'] = _nameController.text;
     request.fields['quantity'] = _quantityController.text;
@@ -153,7 +157,7 @@ class _SellItemsState extends State<SellItems> {
 
     try {
       var response = await request.send();
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         setState(() {
           _imageFile = null;
           _priceController.clear();

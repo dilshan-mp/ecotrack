@@ -18,6 +18,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late Map<String, dynamic>? _userDetails;
   late List<Map<String, dynamic>> _notices = [];
+  bool _iconsVisible = false; // Added boolean variable
 
   @override
   void initState() {
@@ -58,6 +59,12 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  void _toggleIconsVisibility() {
+    setState(() {
+      _iconsVisible = !_iconsVisible;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,6 +74,24 @@ class _HomePageState extends State<HomePage> {
           style: const TextStyle(color: Colors.black),
         ),
         actions: [
+          IconButton(
+            onPressed: _toggleIconsVisibility, // Toggle visibility when this icon is clicked
+            icon: Icon(Icons.settings), // Change this icon to your preferred update icon
+          ),
+          if (_iconsVisible) // Render delete and update icons if _iconsVisible is true
+            IconButton(
+              onPressed: () {
+                // Implement update action
+              },
+              icon: Icon(Icons.update),
+            ),
+          if (_iconsVisible) // Render delete and update icons if _iconsVisible is true
+            IconButton(
+              onPressed: () {
+                // Implement delete action
+              },
+              icon: Icon(Icons.delete),
+            ),
           IconButton(
             onPressed: () {
               Navigator.push(
